@@ -23,6 +23,7 @@
 #include <syslog.h>
 #include <math.h>
 #include <curses.h>
+#include "mysqlConnector.h"
 
 //--------------------------------------------------------------------
 
@@ -327,7 +328,7 @@ typedef enum {
     EGTS_PC_UNS_TYPE,// неподдерживаемый тип
     EGTS_PC_NOTEN_PARAMS,//  неверное количество параметров
     EGTS_PC_DBL_PROC,// попытка повторной обработки
-    EGTS_PC_PROC_SRC_DENIED,// обработка данных от источника запрещена 
+    EGTS_PC_PROC_SRC_DENIED,// обработка данных от источника запрещена
     EGTS_PC_HEADERCRC_ERROR,// ошибка контрольной суммы заголовка
     EGTS_PC_DATACRC_ERROR,// ошибка контрольной суммы данных
     EGTS_PC_INVDATALEN,// некорректная длина данных
@@ -360,30 +361,30 @@ typedef enum {
 
 //-----------------------------------------------------------------------------------------------------------
 
-uint32_t tout;
+extern uint32_t tout;
 
-char const *vers;
+extern char const *vers;
 
-int fd_log;
+extern int fd_log;
 
-uint8_t QuitAll;
-uint8_t SIGHUPs;
-uint8_t SIGTERMs;
-uint8_t SIGINTs;
-uint8_t SIGKILLs;
-uint8_t SIGSEGVs;
-uint8_t SIGABRTs;
-uint8_t SIGSYSs;
-uint8_t SIGTRAPs;
+extern uint8_t QuitAll;
+extern uint8_t SIGHUPs;
+extern uint8_t SIGTERMs;
+extern uint8_t SIGINTs;
+extern uint8_t SIGKILLs;
+extern uint8_t SIGSEGVs;
+extern uint8_t SIGABRTs;
+extern uint8_t SIGSYSs;
+extern uint8_t SIGTRAPs;
 
-uint8_t QuitCli;
+extern uint8_t QuitCli;
 
-const char *the_log;
+extern const char *the_log;
 
-int MaxLogLevel;
+extern int MaxLogLevel;
 
 
-uint8_t service_flag;
+extern uint8_t service_flag;
 
 //------------------------------------------------------------------------------
 

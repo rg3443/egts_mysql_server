@@ -57,8 +57,8 @@ const char *SrcLocation[] = {
 //char const *vers = "1.1";//23.08.2019
 //char const *vers = "1.2";//26.08.2019
 //char const *vers = "1.3";//27.08.2019
-char const *vers = "1.4";//22.03.2024
-
+//char const *vers = "1.4";//22.03.2024
+char const *vers = "1.5";//10.11.2025
 //-----------------------------------------------------------------------------------------------------------
 
 uint32_t tout = 0;
@@ -584,11 +584,17 @@ s_sr_ad_sensors_data *sr_ad_sensors_data = NULL;
 uint32_t latit, longit;
 float flatit, flongit;
 
+
 uint16_t *crc16 = (uint16_t *)&from_cli[flen - 2];//CRC16 from device
 
 uint8_t  calc_CRC8  = CRC8EGTS((uint8_t *)hdr, hdr->HL - 1);
 uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 
+    const char* server = "";
+    const char* user  = "";
+    const char* password = "";
+    const char* db = "";
+    bool mysqlConnected = ConnectMYSQL(server,user,password,db);
 
     pid_num = hdr->PID;
 
@@ -641,7 +647,15 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                 case EGTS_SR_TERM_IDENTITY://   (1)
                                     term_id = (s_term_id *)uki;
                                     uki += sizeof(uint32_t);//skeep TID (Terminal Identifier)
-                                    byte = *uki++;//
+                                    byte = *uki++;
+
+                                    if(mysqlConnected) {
+                                        char querryStr[100];
+                                        sprintf(querryStr,sizeof(querryStr),"CALL InsertMachines(0,0,0,0,0,0,%d);",term_id->TID);
+                                        MYSQL_RES * res;
+                                        QuerryMYSQL(querryStr,res);
+                                    }
+
                                     sprintf(srst+strlen(srst), "\t\tTID:%u\n\t\tFlags:0x%02X:\n"
                                         "\t\t\tMNE:%u BSE:%u NIDE:%u SSRA:%u LNGCE:%u IMSIE:%u IMEIE:%u HDIDE:%u\n\t\t",
                                         term_id->TID, byte,
@@ -1145,7 +1159,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
         if (check_delay_sec(gtmr)) {
             tout++;
             print_msg(1, "[%s] ***** Timeout - no data from client, counter #%u (%d sec) *****\n", dev, tout, max_data_wait);
-            beep();
+            //beep();
             break;
         }
 
