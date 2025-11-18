@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1762775381 source:/home/proj/lib/c/egts_mysql_server/egtsFunc.c
+1763414189 source:/home/proj/lib/c/egts_mysql_server/egtsFunc.c
 	"egtsFunc.h"
 
 1762771496 /home/proj/lib/c/egts_mysql_server/egtsFunc.h
@@ -30,10 +30,13 @@
 1762761370 source:/home/proj/lib/c/egts_mysql_server/main.c
 	"egtsFunc.h"
 
-1762775347 source:/home/proj/lib/c/egts_mysql_server/mysqlConnector.c
+1763413643 source:/home/proj/lib/c/egts_mysql_server/mysqlConnector.c
 	"mysqlConnector.h"
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
 
-1763036285 /home/proj/lib/c/egts_mysql_server/mysqlConnector.h
+1763413638 /home/proj/lib/c/egts_mysql_server/mysqlConnector.h
 	<mysql.h>
 	<stdio.h>
 	<stdlib.h>
