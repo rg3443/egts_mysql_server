@@ -650,10 +650,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     byte = *uki++;
 
                                     if(mysqlConnected) {
-                                        //char querryStr[100];
-                                        //sprintf(querryStr,sizeof(querryStr),"CALL InsertMachines(0,0,0,0,0,0,%d);",term_id->TID);
-                                        //MYSQL_RES * res;
-                                        //QuerryMYSQL(querryStr,res);
+                                        InsertTerminal(conn_,term_id->TID);
                                     }
 
                                     sprintf(srst+strlen(srst), "\t\tTID:%u\n\t\tFlags:0x%02X:\n"
@@ -853,11 +850,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     uki += dl;
 
                                     if(mysqlConnected) {
-                                        InsertPos(conn_,
-                                            term_id->TID,ShowTime(tim),sr_pos_data->LAT,sr_pos_data->LONG,
-                                            sr_pos_data->ALTE,sr_pos_data->SPD,sr_pos_data->DIR,sr_pos_data->ODM,
-                                            sr_pos_data->DIN,sr_pos_data->SRC
-                                        );
+                                        SQLQuerryPosData(conn_,sr_pos_data);
                                     }
                                 break;
                                 case EGTS_SR_EXT_POS_DATA://17
@@ -1214,3 +1207,25 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
 
 //---------------------------------------------------------------------
 
+
+void SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data)
+{
+    InsertPos(
+        conn,
+        term_id->TID,
+        pos_data->NTM,
+        pos_data->LAT,
+        pos_data->LONG,
+        pos_data->LOHS,
+        pos_data->LAHS,
+        pos_data->MV,
+        pos_data->BB,
+        pos_data->FIX,
+        pos_data->SPD,
+        pos_data->ALTE,
+        pos_data->DIR,
+        pos_data->ODM,
+        pos_data->DIN,
+        pos_data->SRC
+    );
+}

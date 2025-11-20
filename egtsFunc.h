@@ -215,15 +215,15 @@ typedef struct {
 
 #pragma pack(push,1)
 typedef struct {
-    uint32_t TID;
-    unsigned HDIDE:1;
-    unsigned IMEIE:1;
-    unsigned IMSIE:1;
-    unsigned LNGCE:1;
-    unsigned SSRA:1;
-    unsigned NIDE:1;
-    unsigned BSE:1;
-    unsigned MNE:1;
+    uint32_t TID; // terminal identifier
+    unsigned HDIDE:1; // home dispatcher identifier
+    unsigned IMEIE:1; // International mobile equipment identify
+    unsigned IMSIE:1; // international mobile subscriber identity
+    unsigned LNGCE:1; // language code
+    unsigned SSRA:1; 
+    unsigned NIDE:1;// network identifier
+    unsigned BSE:1; //buffer size
+    unsigned MNE:1; //
 //    uint16_t HDID;//Home Dispatcher Identifier
 //    char IMEI[15];
 //    char IMSI[16];
@@ -395,6 +395,8 @@ void print_msg(uint8_t dt, const char *fmt, ...);
 void GetSignal_(int sig);
 
 void *egts_nitka(void *arg);
+
+void SQLQuerryPosData(MYSQL* conn, s_term_id term_id, s_sr_pos_data * pos_data);
 
 //------------------------------------------------------------------------------
 

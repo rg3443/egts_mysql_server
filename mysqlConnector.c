@@ -114,32 +114,59 @@ static int exec_call(MYSQL *conn, const char *sql,
     return 0;
 }
 
+
+int InsertTerminal(MYSQL *conn, uint32_t terminalIds)
+{
+    const char* sqlQuerry = "CALL upsert_terminal_adv(?,'.','active',NULL);";
+    MYSQL_BIND b[1] = {0};
+    bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId),0);
+   
+    return exec_call(conn,sqlQuerry,b,4,NULL);
+}
+
 int InsertPos(
     MYSQL *conn,
-    int64_t terminalId,
-    const char* timeStamp,
-    double latitude,
-    double longitude,
-    int32_t atitude,
+    uint32_t terminalId,
+    uint32_t navigation_time, //ntm
+    uint32_t latitude, // lat
+    uint32_t longitude,// long
+    unsigned lohs,
+    unsigned lahs,
+    unsigned is_moving, //mv
+    unsigned is_blackbox, //bb
+    unsigned is_3d, // fix
+    unsigned cs, //  0-WGS-84, 1-ПЗ-90.02
+    unsigned is_valid, // vld
     int16_t speed,
-    int16_t direction,
-    int32_t odometr,
-    int8_t digitalInputs,
+    unsigned alte,
+    int8_t direction,
+    int8_t odometr[3],
+    uint8_t digital_input, //din
     int8_t source
 )
 {
-    const char* sqlQuerry = "CALL insert_position(?,?,?,?,?,?,?,?,?,?);";
-    MYSQL_BIND b[10] = {0};
+    const char* sqlQuerry = "CALL insert_position(?,NOW(6),?,?,?,0,?,?,?,?,?,?,?,?,0,?,?,?,0,0);";
+    MYSQL_BIND b[17] = {0};
     bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId),0);
-    bind_param(&b[1], MYSQL_TYPE_DATETIME, timeStamp, sizeof(timeStamp),0);
-    bind_param(&b[2], MYSQL_TYPE_DOUBLE, &latitude, sizeof(latitude),0);
-    bind_param(&b[3], MYSQL_TYPE_DOUBLE, &longitude, sizeof(longitude),0);
-    bind_param(&b[4], MYSQL_TYPE_LONG, atitude, sizeof(atitude),0);
-    bind_param(&b[5], MYSQL_TYPE_SHORT, speed, sizeof(speed),0);
-    bind_param(&b[6], MYSQL_TYPE_SHORT, direction, sizeof(direction),0);
-    bind_param(&b[7], MYSQL_TYPE_LONG, odometr, sizeof(odometr),0);
-    bind_param(&b[8], MYSQL_TYPE_TINY, digitalInputs, sizeof(digitalInputs),0);
-    bind_param(&b[9], MYSQL_TYPE_TINY, source, sizeof(source),0);
-
+   // bind_param(&b[1], MYSQL_TYPE_DATETIME, timeStamp, sizeof(timeStamp),0);
+    bind_param(&b[1], MYSQL_TYPE_LONG, &navigation_time, sizeof(uint32_t),0);
+    bind_param(&b[2], MYSQL_TYPE_LONG, &latitude, sizeof(uint32_t),0);
+    bind_param(&b[3], MYSQL_TYPE_LONG, &longitude, sizeof(uint32_t),0);
+    bind_param(&b[4], MYSQL_TYPE_LONG, &lohs, sizeof(unsigned),0);
+    bind_param(&b[5], MYSQL_TYPE_LONG,&lahs, sizeof(unsigned),0);
+    bind_param(&b[6], MYSQL_TYPE_LONG,&is_moving, sizeof(unsigned),0);
+    bind_param(&b[7], MYSQL_TYPE_LONG,&is_blackbox, sizeof(unsigned),0);
+    bind_param(&b[8], MYSQL_TYPE_LONG,&is_3d, sizeof(unsigned),0);
+    bind_param(&b[9], MYSQL_TYPE_LONG,&cs, sizeof(unsigned),0);
+    bind_param(&b[10], MYSQL_TYPE_LONG,&is_valid, sizeof(unsigned),0);
+    bind_param(&b[11], MYSQL_TYPE_LONG,&speed, sizeof(uint16_t),0);
+    bind_param(&b[12], MYSQL_TYPE_LONG,&alte, sizeof(unsigned),0);
+    bind_param(&b[13], MYSQL_TYPE_LONG,&direction, sizeof(uint16_t),0);
+    //todo: combine odm
+    uint32_t odm = 0;
+    bind_param(&b[14], MYSQL_TYPE_LONG,&odm, sizeof(uint32_t),0);
+    bind_param(&b[15], MYSQL_TYPE_LONG,&digital_input, sizeof(uint8_t),0);
+    bind_param(&b[16], MYSQL_TYPE_LONG,&source, sizeof(uint8_t),0);
+    
     return exec_call(conn,sqlQuerry,b,4,NULL);
 }
