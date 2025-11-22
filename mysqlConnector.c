@@ -7,20 +7,32 @@ bool ConnectMYSQL(const char* server,
                   const char* password,
                   const char* db)
 {
-    // Инициилизация обьекта подключения
-    if(conn_ != NULL) {
-        printf("MYSQL allready inited\n");
-    } else {
-        conn_ = mysql_init(NULL);
-        if (conn_ == NULL) {
-            fprintf(stderr, "mysql_init() failed\n");
-            return false;
+    // Если соединение уже есть — проверяем, живо ли онo
+    if (conn_ != NULL) {
+        if (mysql_ping(conn_) == 0) {
+            // Соединение живо — ничего не делаем
+            printf("MySQL: соединение уже активно\n");
+            return true;
+        } else {
+            // Соединение мертво — закрываем и переподключаемся
+            printf("MySQL: старое соединение разорвано, переподключаемся...\n");
+            mysql_close(conn_);
+            conn_ = NULL;
         }
     }
-    // Подключение (real)
-    if (mysql_real_connect(conn_, server, user, password, db, 0, NULL, 0) == NULL) {
+
+    // Инициализация нового объекта
+    conn_ = mysql_init(NULL);
+    if (conn_ == NULL) {
+        fprintf(stderr, "mysql_init() failed — нехватка памяти\n");
+        return false;
+    }
+
+    // Реальное подключение
+    if (mysql_real_connect(conn_, server, user, password, db, 3306, NULL, 0) == NULL) {
         fprintf(stderr, "mysql_real_connect() failed: %s\n", mysql_error(conn_));
         mysql_close(conn_);
+        conn_ = NULL;
         return false;
     }
 
@@ -32,13 +44,13 @@ bool QuerryMYSQL(const char* querryStr, MYSQL_RES * res)
 {
     MYSQL_ROW row;
     // Проверка подключения
-    if(!mysql_ping(conn_)) {
+    if(mysql_ping(conn_) != 0) {
         fprintf(stderr, "mysql_ping() failed: %s\n", mysql_error(conn_));
         mysql_close(conn_);
         return false;
     }
     // Запрос
-    if(!mysql_query(conn_,querryStr)) {
+    if(mysql_query(conn_,querryStr) != 0) {
         fprintf(stderr, "mysql_querry() failed: %s\n", mysql_error(conn_));
         return false;
     } else {
@@ -115,12 +127,12 @@ static int exec_call(MYSQL *conn, const char *sql,
 }
 
 
-int InsertTerminal(MYSQL *conn, uint32_t terminalIds)
+int InsertTerminal(MYSQL *conn, uint32_t terminalId)
 {
     const char* sqlQuerry = "CALL upsert_terminal_adv(?,'.','active',NULL);";
     MYSQL_BIND b[1] = {0};
     bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId),0);
-   
+
     return exec_call(conn,sqlQuerry,b,4,NULL);
 }
 
@@ -167,6 +179,6 @@ int InsertPos(
     bind_param(&b[14], MYSQL_TYPE_LONG,&odm, sizeof(uint32_t),0);
     bind_param(&b[15], MYSQL_TYPE_LONG,&digital_input, sizeof(uint8_t),0);
     bind_param(&b[16], MYSQL_TYPE_LONG,&source, sizeof(uint8_t),0);
-    
+
     return exec_call(conn,sqlQuerry,b,4,NULL);
 }

@@ -220,7 +220,7 @@ typedef struct {
     unsigned IMEIE:1; // International mobile equipment identify
     unsigned IMSIE:1; // international mobile subscriber identity
     unsigned LNGCE:1; // language code
-    unsigned SSRA:1; 
+    unsigned SSRA:1;
     unsigned NIDE:1;// network identifier
     unsigned BSE:1; //buffer size
     unsigned MNE:1; //
@@ -386,6 +386,13 @@ extern int MaxLogLevel;
 
 extern uint8_t service_flag;
 
+
+
+    extern const char* server_;
+    extern const char* user_;
+    extern const char* password_;
+    extern const char* db_;
+
 //------------------------------------------------------------------------------
 
 char *ShowTime(time_t ct);
@@ -396,7 +403,7 @@ void GetSignal_(int sig);
 
 void *egts_nitka(void *arg);
 
-void SQLQuerryPosData(MYSQL* conn, s_term_id term_id, s_sr_pos_data * pos_data);
+void SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data);
 
 //------------------------------------------------------------------------------
 

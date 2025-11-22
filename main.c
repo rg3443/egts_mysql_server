@@ -1,8 +1,25 @@
 #include "egtsFunc.h"
-
-
+//#include <iostream>
+#include <locale.h>
+#include <wchar.h>
+#include <stdio.h>
+#include <stdlib.h>
 int main(int argc, char *argv[])
 {
+//int reconnect = 1;          // обязательно включаем автопереподключение
+//mysql_options(conn_, MYSQL_OPT_RECONNECT, &reconnect);
+/*
+setlocale(LC_ALL, "");
+bool conRes = ConnectMYSQL(server_,user_,password_,db_);
+if(!conRes) {
+   // printf("oops, connection failed: %s\n",mysql_error(conn_));
+} else {
+   // MYSQL_RES * res;
+    //printf("eh, %s\n",mysql_error(conn_));
+    bool querryRes = QuerryMYSQL("CALL upsert_terminal(1337,'test','inactive',NULL);",NULL);
+    if(!querryRes) printf("querry failed: %s\n", mysql_error(conn_));
+}
+*/
 fd_set Fds;
 uint16_t tcp_port = 9876;
 struct sockaddr_in srv_conn, cli_conn;

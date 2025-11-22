@@ -158,6 +158,12 @@ const uint16_t Crc16Table[256] = {
 };
 
 
+const char* server_ = "172.27.160.1";
+const char* user_  = "remote_user";
+const char* password_ = "[eqdgbplt1337A";
+const char* db_ = "egts_telemetry";
+
+
 //------------------------------------------------------------------------------
 uint8_t CRC8EGTS(uint8_t *uk, uint8_t len)
 {
@@ -228,6 +234,7 @@ void ToSysLogMsg(int LogLevel, const char * const Msg)
 //----------------------------------------------------------------------
 void print_msg(uint8_t dt, const char *fmt, ...)
 {
+/*
 size_t len = buf_size;
 char dts[TIME_STR_LEN] = {0};
 char *udt = TimeNowPrn(dts);
@@ -268,7 +275,7 @@ char *udt = TimeNowPrn(dts);
         free(st);
 
     }
-
+*/
 }
 //--------------------  function for recive SIGNAL from system -----------
 void GetSignal_(int sig)
@@ -589,12 +596,7 @@ uint16_t *crc16 = (uint16_t *)&from_cli[flen - 2];//CRC16 from device
 
 uint8_t  calc_CRC8  = CRC8EGTS((uint8_t *)hdr, hdr->HL - 1);
 uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
-
-    const char* server = "";
-    const char* user  = "";
-    const char* password = "";
-    const char* db = "";
-    bool mysqlConnected = ConnectMYSQL(server,user,password,db);
+    bool mysqlConnected = ConnectMYSQL(server_,user_,password_,db_);
 
     pid_num = hdr->PID;
 
@@ -850,7 +852,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     uki += dl;
 
                                     if(mysqlConnected) {
-                                        SQLQuerryPosData(conn_,sr_pos_data);
+                                        SQLQuerryPosData(conn_,term_id,sr_pos_data);
                                     }
                                 break;
                                 case EGTS_SR_EXT_POS_DATA://17
@@ -1221,6 +1223,8 @@ void SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data
         pos_data->MV,
         pos_data->BB,
         pos_data->FIX,
+        pos_data->CS,
+        pos_data->VLD,
         pos_data->SPD,
         pos_data->ALTE,
         pos_data->DIR,

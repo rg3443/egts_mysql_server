@@ -15,7 +15,7 @@ bool ConnectMYSQL(const char* server,
 
 bool QuerryMYSQL(const char* querryStr, MYSQL_RES * res);
 
-int InsertTerminal(MYSQL *conn, uint32_t terminalIds);
+int InsertTerminal(MYSQL *conn, uint32_t terminalId);
 
 int InsertPos(
     MYSQL *conn,
