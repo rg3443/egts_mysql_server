@@ -2,6 +2,12 @@
 
 //conn = 0;
 MYSQL * conn_ = NULL;
+
+const char* server_ = "172.27.160.1";
+const char* user_  = "remote_user";
+const char* password_ = "[eqdgbplt1337A";
+const char* db_ = "egts_telemetry";
+
 bool ConnectMYSQL(const char* server,
                   const char* user,
                   const char* password,

@@ -322,7 +322,7 @@ typedef struct {
 typedef struct {
 	uint32_t ASN; 	// Analog Sensor Number
 	uint32_t ASV; 	// Analog Sensor Value
-} s_abs_an_sens;
+} s_sr_abs_an_sens_data;
 #pragma pack(pop)
 
 #pragma pack(push,1)
@@ -330,14 +330,14 @@ typedef struct {
 	uint16_t DSN_low; 	// Digital Sensor Number low bytes
 	uint16_t DSST; 		// Digital Sensor State
 	uint32_t DSN_high;  // Digital Sensor Number high bytes
-} s_abs_dig_sens;
+} s_sr_abs_dig_sens_data;
 #pragma pack(pop)
 
 #pragma pack(push,1)
 typedef struct {
 	uint32_t CN;	// Counter Number
 	uint32_t CNV;	// Counter Value
-} s_abs_cntrl;
+} s_sr_abs_cntrl_data;
 #pragma pack(pop)
 
 #pragma pack(pus,1)
@@ -423,11 +423,6 @@ extern uint8_t service_flag;
 
 
 
-    extern const char* server_;
-    extern const char* user_;
-    extern const char* password_;
-    extern const char* db_;
-
 //------------------------------------------------------------------------------
 
 char *ShowTime(time_t ct);
@@ -442,9 +437,9 @@ void SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data
 
 void SQLQuerryTerminalData(MYSQL* conn, s_term_id * term_id);
 
-void SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_abs_an_sens * ain_data);
+void SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_sr_abs_an_sens_data * ain_data);
 
-void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_abs_dig_sens * din_data);
+void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data * din_data);
 
 void SQLQuerryCounter() {} // todo: !
 

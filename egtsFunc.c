@@ -158,12 +158,6 @@ const uint16_t Crc16Table[256] = {
 };
 
 
-const char* server_ = "172.27.160.1";
-const char* user_  = "remote_user";
-const char* password_ = "[eqdgbplt1337A";
-const char* db_ = "egts_telemetry";
-
-
 //------------------------------------------------------------------------------
 uint8_t CRC8EGTS(uint8_t *uk, uint8_t len)
 {
@@ -588,6 +582,14 @@ s_sr_info *sr_info = NULL;
 s_sr_pos_data *sr_pos_data = NULL;
 s_sr_ext_pos_data *sr_ext_pos_data = NULL;
 s_sr_ad_sensors_data *sr_ad_sensors_data = NULL;
+
+//todo: handle parsing
+s_sr_abs_an_sens_data *sr_abs_an_sens_data = NULL;
+s_sr_abs_dig_sens_data *sr_abs_dig_sens_data = NULL;
+s_sr_abs_cntrl_data *sr_abs_cntrl_data = NULL;
+s_sr_state_data* sr_state_data = NULL;
+s_sr_state_data *sr_state_data = NULL;
+
 uint32_t latit, longit;
 float flatit, flongit;
 
@@ -630,7 +632,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                 }
                 sst = *uki++;
                 rst = *uki++;
-                //uki -> pointer to Record Data (record type)
+                //uki -> pointer to Record Data (record type) - wtf maaaaan, what is it
                 rtype = *uki++;//get SRT (Subrecord Type)
                 memcpy(&rlen, uki, sizeof(uint16_t));//get SRL (Subrecord Length)
                 uki += sizeof(uint16_t);//uk to SRD (Subrecord Data)
@@ -912,8 +914,6 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                 break;
                                 case EGTS_SR_STATE_DATA://21 todo: !
                                     uki += rlen;
-									
-									
                                 break;
                                 case EGTS_SR_LOOPIN_DATA://22
                                     uki += rlen;

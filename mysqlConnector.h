@@ -8,6 +8,12 @@
 
 extern MYSQL *conn_;           // Соединение
 
+
+extern const char* server_;		
+extern const char* user_;
+extern const char* password_;
+extern const char* db_;
+	
 bool ConnectMYSQL(const char* server,
                   const char* user,
                   const char* password,
