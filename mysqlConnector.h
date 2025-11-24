@@ -61,4 +61,18 @@ int InsertTerminalState(
 	unsigned bbu	// backup battery use
 );
 
+int InsertDin(
+	MYSQL *conn,
+	uint32_t terminalId,
+	uint8_t dinId,
+	uint32_t dinVal
+);
+
+int InsertAin(
+	MYSQL *conn,
+	uint32_t terminalId,
+	uint8_t ainId,
+	uint32_t ainVal
+);
+
 #endif // MYSQLCONNECTOR_H_INCLUDED

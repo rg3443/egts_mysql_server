@@ -165,7 +165,7 @@ int InsertPos(
     unsigned cs,    //  0-WGS-84, 1-ПЗ-90.02
     unsigned vld,   // is valid
     int16_t spd,   	// speed
-    unsigned alte, 	//is altitude here
+    unsigned alte, 	// is altitude here
     int8_t dir, 	// direction
     int8_t odm[3], 	// odometr
     uint8_t din, 	// digital input
@@ -213,7 +213,7 @@ int InsertTerminalState(
 	const char* sqlQuerry = "CALL upsert_state(?,?,?,?,?,?,?,?);";
 	
 	MYSQL_BIND b[8] = {0};
-	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminal_id, sizeof(uint32_t),0);
+	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminal_id, sizeof(terminalId),0);
 	bind_param(&b[1], MYSQL_TYPE_SMALLINT, st, sizeof(uint8_t),0);
 	bind_param(&b[2], MYSQL_TYPE_LONG, mpsv, sizeof(uint32_t),0);
 	bind_param(&b[3], MYSQL_TYPE_LONG, bbv, sizeof(uint32_t),0);
@@ -221,6 +221,40 @@ int InsertTerminalState(
 	bind_param(&b[5], MYSQL_TYPE_SMALLINT, nms, sizeof(unsigned),0);
 	bind_param(&b[6], MYSQL_TYPE_SMALLINT, ibu, sizeof(unsigned),0);
 	bind_param(&b[7], MYSQL_TYPE_SMALLINT, bbu, sizeof(unsigned),0);
+	
+	return exec_call(conn,sqlQuerry,b,4,NULL);
+}
+
+int InsertDin(
+	MYSQL *conn,
+	uint32_t terminalId,
+	uint8_t dinId,
+	uint32_t dinVal
+)
+{
+	const char* sqlQuerry = "CALL upsert_din_sens_data(?,?,?);";
+
+	MYSQL_BIND b[3] = {0};
+	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId),0);
+	bind_param(&b[1], MYSQL_TYPE_SMALLINT, dinId, sizeof(dinId),0);
+	bind_param(&b[2], MYSQL_TYPE_LONG, dinVal, sizeof(dinVal),0);
+	
+	return exec_call(conn,sqlQuerry,b,4,NULL);
+}
+
+int InsertAin(
+	MYSQL *conn,
+	uint32_t terminalId,
+	uint8_t ainId,
+	uint32_t ainVal
+)
+{
+	const char* sqlQuerry = "CALL upsert_an_sens_data(?,?,?);";
+
+	MYSQL_BIND b[3] = {0};
+	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId),0);
+	bind_param(&b[1], MYSQL_TYPE_SMALLINT, ainId, sizeof(ainId),0);
+	bind_param(&b[2], MYSQL_TYPE_LONG, ainVal, sizeof(ainVal),0);
 	
 	return exec_call(conn,sqlQuerry,b,4,NULL);
 }
