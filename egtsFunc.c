@@ -912,8 +912,46 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                 case EGTS_SR_ACCEL_DATA://20
                                     uki += rlen;
                                 break;
-                                case EGTS_SR_STATE_DATA://21 todo: !
-                                    uki += rlen;
+                                case EGTS_SR_STATE_DATA://21
+                                    if (rlen < 1) {
+										sprintf(srst+strlen(srst), "\t\tEGTS_SR_STATE_DATA: too short\n");
+										uki += rlen;
+										break;
+									}
+
+									uint8_t flags = *uki++;  // SDF - State Data Flags
+
+									sprintf(srst+strlen(srst), 
+											"\t\tEGTS_SR_STATE_DATA Flags:0x%02X\n"
+											"\t\t\tIV:%u OV:%u CV:%u BBV:%u MFV:%u\n",
+											flags,
+											!!(flags & 0x01), !!(flags & 0x02), !!(flags & 0x04),
+											!!(flags & 0x08), !!(flags & 0x10));
+
+									if (flags & 0x01) { // Input Values
+										uint8_t iv = *uki++;
+										sprintf(srst+strlen(srst), "\t\t\tInput Values (DIN): 0x%02X\n", iv);
+									}
+									if (flags & 0x02) { // Output Values
+										uint8_t ov = *uki++;
+										sprintf(srst+strlen(srst), "\t\t\tOutput Values (DOUT): 0x%02X\n", ov);
+									}
+									if (flags & 0x04) { // Communication Values
+										uint8_t cv = *uki++;
+										sprintf(srst+strlen(srst), "\t\t\tCommunication State: 0x%02X\n", cv);
+									}
+									if (flags & 0x08) { // Backup Battery Voltage
+										uint8_t bbv = *uki++;
+										sprintf(srst+strlen(srst), "\t\t\tBackup Battery Voltage: %u.%02u V\n",
+												bbv / 4, (bbv % 4) * 25);  // формула из протокола
+									}
+									if (flags & 0x10) { // Main Power Voltage
+										uint8_t mfv = *uki++;
+										sprintf(srst+strlen(srst), "\t\t\tMain Power Voltage: %u.%02u V\n",
+												mfv / 4, (mfv % 4) * 25);
+									} 
+
+									sprintf(srst+strlen(srst), "\n");
                                 break;
                                 case EGTS_SR_LOOPIN_DATA://22
                                     uki += rlen;
