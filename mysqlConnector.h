@@ -15,27 +15,50 @@ bool ConnectMYSQL(const char* server,
 
 bool QuerryMYSQL(const char* querryStr, MYSQL_RES * res);
 
-int InsertTerminal(MYSQL *conn, uint32_t terminalId);
+int InsertTerminal(
+	MYSQL *conn, 
+	uint32_t terminalId,
+	const char* expiredAt,
+	uint16_t hdid,
+	uint16_t bs,
+	char imei[15] 	= {0},
+	char imsi[16] 	= {0},
+	char lngc[3] 	= {0},
+	uint8_t nid[3] 	= {0},
+	char msisdn[15] = {0}
+);
 
 int InsertPos(
     MYSQL *conn,
     uint32_t terminalId,
-    uint32_t navigation_time, //ntm
-    uint32_t latitude, // lat
-    uint32_t longitude,// long
-    unsigned lohs,
-    unsigned lahs,
-    unsigned is_moving, //mv
-    unsigned is_blackbox, //bb
-    unsigned is_3d, // fix
-    unsigned cs, //  0-WGS-84, 1-ПЗ-90.02
-    unsigned is_valid, // vld
-    int16_t speed,
-    unsigned alte,
-    int8_t direction,
-    int8_t odometr[3],
-    uint8_t digital_input, //din
-    int8_t source
+    uint32_t ntm, 	// navigation time
+    uint32_t lat, 	// latitude
+    uint32_t longg,	// longitude
+    unsigned lohs, 	// 1-west 0-east
+    unsigned lahs,	// 1-south 0-north
+    unsigned mv, 	// is moving
+    unsigned bb, 	// is blackbox
+    unsigned fix,	// is 3d
+    unsigned cs,    //  0-WGS-84, 1-ПЗ-90.02
+    unsigned vld,   // is valid
+    int16_t spd,   	// speed
+    unsigned alte, 	//is altitude here
+    int8_t dir, 	// direction
+    int8_t odm[3], 	// odometr
+    uint8_t din, 	// digital input
+    int8_t src 		// source
+);
+
+int InsertTerminalState(
+	MYSQL *conn,
+	uint32_t terminalId,
+	uint8_t st,		// state
+	uint32_t mpsv,	// main power source voltage
+	uint32_t bbv,	// backup battery votlage
+	uint32_t ibv,	// interal battery voltage
+	unsigned nms, 	// navigation module time
+	unsigned ibu,	// internal battery use
+	unsigned bbu	// backup battery use
 );
 
 #endif // MYSQLCONNECTOR_H_INCLUDED

@@ -224,6 +224,7 @@ typedef struct {
     unsigned NIDE:1;// network identifier
     unsigned BSE:1; //buffer size
     unsigned MNE:1; //
+	//todo: !!! why not parsing
 //    uint16_t HDID;//Home Dispatcher Identifier
 //    char IMEI[15];
 //    char IMSI[16];

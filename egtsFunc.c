@@ -910,19 +910,19 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                 case EGTS_SR_ACCEL_DATA://20
                                     uki += rlen;
                                 break;
-                                case EGTS_SR_STATE_DATA://21
+                                case EGTS_SR_STATE_DATA://21 todo: !
                                     uki += rlen;
                                 break;
                                 case EGTS_SR_LOOPIN_DATA://22
                                     uki += rlen;
                                 break;
-                                case EGTS_SR_ABS_DIG_SENS_DATA://23
+                                case EGTS_SR_ABS_DIG_SENS_DATA://23 todo: !
                                     uki += rlen;
                                 break;
-                                case EGTS_SR_ABS_AN_SENS_DATA://24
+                                case EGTS_SR_ABS_AN_SENS_DATA://24 todo: !
                                     uki += rlen;
                                 break;
-                                case EGTS_SR_ABS_CNTR_DATA://25
+                                case EGTS_SR_ABS_CNTR_DATA://25 todo: !
                                     uki += rlen;
                                 break;
                                 case EGTS_SR_ABS_LOOPIN_DATA://26
