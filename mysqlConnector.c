@@ -198,7 +198,7 @@ int InsertPos(
     return exec_call(conn,sqlQuerry,b,4,NULL);
 }
 
-int InsertTerminalState(
+int InsertState(
 	MYSQL *conn,
 	uint32_t terminalId,
 	uint8_t st,		// state

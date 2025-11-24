@@ -625,7 +625,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                 }
                 if (rec_hdr->TMFE) {
                     memcpy(&tim, uki, sizeof(uint32_t));
-                    uki += sizeof(uint32_t);//uk to SST
+                    uki += sizeof(uint32_t);//uFk to SST
                     tim += UTS2010;
                 }
                 sst = *uki++;
@@ -912,6 +912,8 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                 break;
                                 case EGTS_SR_STATE_DATA://21 todo: !
                                     uki += rlen;
+									
+									
                                 break;
                                 case EGTS_SR_LOOPIN_DATA://22
                                     uki += rlen;
@@ -1232,4 +1234,50 @@ void SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data
         pos_data->DIN,
         pos_data->SRC
     );
+}
+
+void SQLQuerryTerminalData(MYSQL* conn, s_term_id * term_id)
+{
+	InsertTerminal(
+		conn,
+		term_id->TID,
+		"",
+		0,
+		0
+	);
+}
+
+void SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_abs_an_sens * ain_data)
+{
+	InsertAin(
+		conn,
+		term_id->TID,
+		ain_data->ASN,
+		ain_data->ASV
+	);
+}
+
+void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_abs_dig_sens * din_data)
+{
+	InsertAin(
+		conn,
+		term_id->TID,
+		din_data->DSN,
+		din_data->DSV
+	);
+}
+
+void SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * state_data)
+{
+	InsertState(
+		conn,
+		term_id->TID,
+		state_data->ST,
+		state_data->MPSV,
+		state_data->BBV,
+		state_data->IBV,
+		state_data->NMS,
+		state_data->IBU,
+		state_data->BBU
+	);
 }

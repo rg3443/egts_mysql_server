@@ -49,7 +49,7 @@ int InsertPos(
     int8_t src 		// source
 );
 
-int InsertTerminalState(
+int InsertStateData(
 	MYSQL *conn,
 	uint32_t terminalId,
 	uint8_t st,		// state

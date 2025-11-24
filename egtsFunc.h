@@ -318,6 +318,40 @@ typedef struct {
 } s_rec_hdr;
 #pragma pack(pop)
 
+#pragma pack(push,1)
+typedef struct {
+	uint32_t ASN; 	// Analog Sensor Number
+	uint32_t ASV; 	// Analog Sensor Value
+} s_abs_an_sens;
+#pragma pack(pop)
+
+#pragma pack(push,1)
+typedef struct {
+	uint16_t DSN_low; 	// Digital Sensor Number low bytes
+	uint16_t DSST; 		// Digital Sensor State
+	uint32_t DSN_high;  // Digital Sensor Number high bytes
+} s_abs_dig_sens;
+#pragma pack(pop)
+
+#pragma pack(push,1)
+typedef struct {
+	uint32_t CN;	// Counter Number
+	uint32_t CNV;	// Counter Value
+} s_abs_cntrl;
+#pragma pack(pop)
+
+#pragma pack(pus,1)
+typedef struct {
+	uint32_t ST; 	// State
+	uint32_t MPSV;	// Main Power Source Voltage
+	uint32_t BBV; 	// Backup Battery Voltage
+	uint32_t IBV;	// Internal Battery Voltage
+	unsigned NMS;	// Navigation Module: 1-ON 0-OFF
+	unsigned IBU;	// external power supply : 1-ON 0-OFF 
+	unsigned BBU;	// internal battery : 1-ON 0-OFF
+} s_sr_state_data;
+#pragma pack(pop)
+
 typedef enum {
     EGTS_PC_OK = 0,// успешно обработано
     EGTS_PC_IN_PROGRESS,// в процессе обработки (результат обработки ещё не известен)
@@ -406,6 +440,15 @@ void *egts_nitka(void *arg);
 
 void SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data);
 
+void SQLQuerryTerminalData(MYSQL* conn, s_term_id * term_id);
+
+void SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_abs_an_sens * ain_data);
+
+void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_abs_dig_sens * din_data);
+
+void SQLQuerryCounter() {} // todo: !
+
+void SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * state_data);
 //------------------------------------------------------------------------------
 
 #endif
