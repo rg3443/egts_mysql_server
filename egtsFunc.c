@@ -597,10 +597,13 @@ uint16_t *crc16 = (uint16_t *)&from_cli[flen - 2];//CRC16 from device
 
 uint8_t  calc_CRC8  = CRC8EGTS((uint8_t *)hdr, hdr->HL - 1);
 uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
+
     bool mysqlConnected = ConnectMYSQL(server_,user_,password_,db_);
 
     pid_num = hdr->PID;
 
+	
+	
     switch (hdr->PT) {
         case EGTS_PT_RESPONSE://0
             iret = -1;
@@ -922,25 +925,23 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     // Обнуляем структуру
                                     if (sr_state_data) memset(sr_state_data, 0, sizeof(*sr_state_data));
 
-                                    // Прямое чтение байт — как в железе
+                                    // Прямое чтение байт 
                                     uint8_t st_raw   = uki[0];   // 8 бит — состояние
                                     uint8_t mpsv_raw = uki[1];   // 8 бит — основное питание
                                     uint8_t bbv_raw  = uki[2];   // резервная батарея
                                     uint8_t ibv_raw  = uki[3];   // внутренняя батарея
                                     uint8_t flags    = uki[4];   // младшие 3 бита — флаги
 
-                                    // Заполняем структуру точно по твоему описанию
                                     if (sr_state_data) {
                                         sr_state_data->ST   = st_raw;                    // 0..255
-                                        sr_state_data->MPSV = mpsv_raw * 10;             // 138 → 1380 (13.8 В × 100)
-                                        sr_state_data->BBV  = bbv_raw  * 10;
+                                        sr_state_data->MPSV = mpsv_raw;              
+                                        sr_state_data->BBV  = bbv_raw;
                                         sr_state_data->IBV  = ibv_raw  * 10;
                                         sr_state_data->NMS  = (flags >> 2) & 1;          // бит 2
                                         sr_state_data->IBU  = (flags >> 1) & 1;          // бит 1
                                         sr_state_data->BBU  = flags & 1;                 // бит 0
                                     }
 
-                                    // Красивый вывод в лог
                                     sprintf(srst+strlen(srst),
                                         "\t\tEGTS_SR_STATE_DATA (Fort Telecom format)\n"
                                         "\t\t  ST:   %u\n"
@@ -958,7 +959,6 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                         flags & 1
                                     );
 
-                                    // Перемещаем указатель
                                     uki += 5;
 
                                     // Если вдруг пришли лишние байты — пропускаем
@@ -971,13 +971,45 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     uki += rlen;
                                 break;
                                 case EGTS_SR_ABS_DIG_SENS_DATA://23 todo: !
-                                    uki += rlen;
+									if(rlen < 2) { uki+=rlen; break; }
+                                    // Обнуляем структуру
+                                    if (sr_abs_dig_sens_data) memset(sr_abs_dig_sens_data, 0, sizeof(*sr_abs_dig_sens_data));
+									
+									uint8_t fbyte = *uki++;
+									uint8_t sbyte = *uki++;
+									
+									sr_abs_dig_sens_data->DSN =  (fbyte << 4) | (sbyte >> 4) & 0x0F;
+									sr_abs_dig_sens_data->DSST = (fbyte >> 1) & 0x0F;
+									
+									if(mysqlConnected) {
+										SQLQuerryDinData(conn_,sr_abs_dig_sens_data);
+									}
+									
                                 break;
                                 case EGTS_SR_ABS_AN_SENS_DATA://24 todo: !
-                                    uki += rlen;
+									if(rlen < 4) { uki+=rlen; break; }
+                                    // Обнуляем структуру
+                                    if (sr_abs_an_sens_data) memset(sr_abs_dig_sens_data, 0, sizeof(*sr_abs_dig_sens_data));
+									 
+									sr_abs_an_sens_data->ASN =  uki[0]; 
+									*uki++;
+									memccpy(&sr_abs_an_sens_data->ASV,uki,sizeof(uint32_t));
+									uki += sizeof(uint32_t);
+									
+									if(mysqlConnected) {
+										SQLQuerryDinData(conn_,sr_abs_dig_sens_data);
+									}
                                 break;
                                 case EGTS_SR_ABS_CNTR_DATA://25 todo: !
-                                    uki += rlen;
+									if(rlen < 4) { uki += rlen; break; }
+									
+									sr_abs_cntrl_data->CN = *uki++;
+									memccpy(&sr_abs_cntrl_data->CNV,uki,sizeof(uint32_t));
+									uki += sizeof(uint32_t);
+									
+									if(mysqlConnected) {
+										SQLQuerryCounter(conn_,sr_abs_cntrl_data);
+									}
                                 break;
                                 case EGTS_SR_ABS_LOOPIN_DATA://26
                                     uki += rlen;
@@ -1317,6 +1349,17 @@ void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data 
 		term_id->TID,
 		finalDSN,
 		din_data->DSST
+	);
+}
+
+
+void SQLQuerryCounter(MYSQL * conn, s_term_id * term_id, s_sr_abs_cntrl_data * cntr_data)
+{
+	InsertCntr(
+		conn,
+		term_id->TID,
+		cntr_data->CN,
+		cntr_data->CNV
 	);
 }
 

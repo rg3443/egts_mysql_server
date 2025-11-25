@@ -320,22 +320,22 @@ typedef struct {
 
 #pragma pack(push,1)
 typedef struct {
-	uint32_t ASN; 	// Analog Sensor Number
+	uint8_t ASN; 	// Analog Sensor Number
 	uint32_t ASV; 	// Analog Sensor Value
 } s_sr_abs_an_sens_data;
 #pragma pack(pop)
 
 #pragma pack(push,1)
 typedef struct {
-	uint16_t DSN_low; 	// Digital Sensor Number low bytes
+	uint32_t DSN; 		// Digital Sensor Number low bytes
 	uint16_t DSST; 		// Digital Sensor State
-	uint32_t DSN_high;  // Digital Sensor Number high bytes
+	//uint32_t DSN_high;  // Digital Sensor Number high bytes
 } s_sr_abs_dig_sens_data;
 #pragma pack(pop)
 
 #pragma pack(push,1)
 typedef struct {
-	uint32_t CN;	// Counter Number
+	uint8_t CN;	// Counter Number
 	uint32_t CNV;	// Counter Value
 } s_sr_abs_cntrl_data;
 #pragma pack(pop)
@@ -441,7 +441,7 @@ void SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_sr_abs_an_sens_data * 
 
 void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data * din_data);
 
-inline void SQLQuerryCounter() {} // todo: !
+void SQLQuerryCounter(MYSQL * conn, s_term_id * term_id, s_sr_abs_cntrl_data * cntr_data);
 
 void SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * state_data);
 //------------------------------------------------------------------------------

@@ -264,3 +264,19 @@ int InsertAin(
 
 	return exec_call(conn,sqlQuerry,b,4,NULL);
 }
+
+int InsertCntr(
+	MYSQL * conn,
+	uint32_t terminalId,
+	uint8_t cn, 	// Counter Number
+	uint32_t cnv 	// Coutner Value
+)
+{
+	const char* sqlQuerry = "CALL upsert_cntr_data(?,?,?);";
+	
+	MYSQL_BIND b[3] = {0};
+	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId),0);
+	bind_param(&b[1], MYSQL_TYPE_TINY, 	   cn, 		   sizeof(cn),0);
+	bind_param(&b[0], MYSQL_TYPE_LONG,     cnv, 	   sizeof(cnv),0);
+	
+}

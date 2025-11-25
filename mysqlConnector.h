@@ -81,4 +81,11 @@ int InsertAin(
 	uint32_t ainVal
 );
 
+int InsertCntr(
+	MYSQL * conn,
+	uint32_t terminalId,
+	uint8_t cn, 	// Counter Number
+	uint32_t cnv 	// Coutner Value
+);
+
 #endif // MYSQLCONNECTOR_H_INCLUDED
