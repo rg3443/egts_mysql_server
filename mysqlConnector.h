@@ -48,20 +48,20 @@ int InsertPos(
     unsigned cs,    //  0-WGS-84, 1-ПЗ-90.02
     unsigned vld,   // is valid
     int16_t spd,   	// speed
-    unsigned alte, 	//is altitude here
-    int8_t dir, 	// direction
+    unsigned alte, 	// is altitude here
+    int16_t dir, 	// direction
     int8_t odm[3], 	// odometr
-    uint8_t din, 	// digital input
-    int8_t src 		// source
+    unsigned din, 	// digital input
+    unsigned src 		// source
 );
 
 int InsertState(
 	MYSQL *conn,
 	uint32_t terminalId,
 	uint8_t st,		// state
-	uint32_t mpsv,	// main power source voltage
-	uint32_t bbv,	// backup battery votlage
-	uint32_t ibv,	// interal battery voltage
+	uint8_t mpsv,	// main power source voltage
+	uint8_t bbv,	// backup battery votlage
+	uint8_t ibv,	// interal battery voltage
 	unsigned nms, 	// navigation module time
 	unsigned ibu,	// internal battery use
 	unsigned bbu	// backup battery use
@@ -70,8 +70,8 @@ int InsertState(
 int InsertDin(
 	MYSQL *conn,
 	uint32_t terminalId,
-	uint8_t dinId,
-	uint32_t dinVal
+	uint32_t dinId,
+	uint16_t dinVal
 );
 
 int InsertAin(

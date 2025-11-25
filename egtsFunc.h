@@ -342,10 +342,10 @@ typedef struct {
 
 #pragma pack(pus,1)
 typedef struct {
-	uint32_t ST; 	// State
-	uint32_t MPSV;	// Main Power Source Voltage
-	uint32_t BBV; 	// Backup Battery Voltage
-	uint32_t IBV;	// Internal Battery Voltage
+	uint8_t ST; 	// State
+	uint8_t MPSV;	// Main Power Source Voltage
+	uint8_t BBV; 	// Backup Battery Voltage
+	uint8_t IBV;	// Internal Battery Voltage
 	unsigned NMS;	// Navigation Module: 1-ON 0-OFF
 	unsigned IBU;	// external power supply : 1-ON 0-OFF
 	unsigned BBU;	// internal battery : 1-ON 0-OFF
