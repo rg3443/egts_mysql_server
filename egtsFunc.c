@@ -911,72 +911,59 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                 case EGTS_SR_ACCEL_DATA://20
                                     uki += rlen;
                                 break;
-                               case EGTS_SR_STATE_DATA: { // 21
-                                    if (rlen < 1) {
-                                        sprintf(srst+strlen(srst), "\t\tEGTS_SR_STATE_DATA: too short (rlen=%u)\n", rlen);
+                                case EGTS_SR_STATE_DATA: // 21 — Fort Telecom реализация (самая популярная)
+                                {
+                                    if (rlen < 5) {
+                                        sprintf(srst+strlen(srst), "\t\tEGTS_SR_STATE_DATA: too short (rlen=%u, expected 5)\n", rlen);
                                         uki += rlen;
                                         break;
                                     }
 
-                                    // Обнуляем структуру перед заполнением
-                                    if (sr_state_data) memset(sr_state_data, 0, sizeof(s_sr_state_data));
+                                    // Обнуляем структуру
+                                    if (sr_state_data) memset(sr_state_data, 0, sizeof(*sr_state_data));
 
-                                    uint8_t flags = *uki++;  // State Data Flags (SDF)
-                                    uint8_t state = 1;       // по умолчанию — терминал живой (ST=1)
+                                    // Прямое чтение байт — как в железе
+                                    uint8_t st_raw   = uki[0];   // 8 бит — состояние
+                                    uint8_t mpsv_raw = uki[1];   // 8 бит — основное питание
+                                    uint8_t bbv_raw  = uki[2];   // резервная батарея
+                                    uint8_t ibv_raw  = uki[3];   // внутренняя батарея
+                                    uint8_t flags    = uki[4];   // младшие 3 бита — флаги
 
-                                    sprintf(srst+strlen(srst), "\t\tEGTS_SR_STATE_DATA Flags:0x%02X ", flags);
-
-                                    // Основные поля
-                                    if (flags & 0x01) { // Input Values (DIN)
-                                        uint8_t inputs = *uki++;
-                                        sprintf(srst+strlen(srst), "DIN:0x%02X ", inputs);
-                                    }
-                                    if (flags & 0x02) { // Output Values (DOUT)
-                                        uint8_t outputs = *uki++;
-                                        sprintf(srst+strlen(srst), "DOUT:0x%02X ", outputs);
-                                    }
-                                    if (flags & 0x04) { // Communication Values
-                                        uint8_t comm = *uki++;
-                                        sprintf(srst+strlen(srst), "COMM:0x%02X ", comm);
-                                    }
-
-                                    // Напряжение
-                                    if (flags & 0x10) { // Main Power Voltage (MPSV)
-                                        uint8_t mpsv_raw = *uki++;
-                                        uint32_t voltage_mv = (mpsv_raw / 4) * 1000 + (mpsv_raw % 4) * 250; // шаг 0.25 В
-                                        if (sr_state_data) {
-                                            sr_state_data->MPSV = voltage_mv / 10;  // в ×100 мВ, как требует структура
-                                            sr_state_data->IBU = 1;                 // если пришло — значит внешнее питание есть
-                                        }
-                                        sprintf(srst+strlen(srst), "MPSV:%.2fV ", voltage_mv / 1000.0);
-                                    } else {
-                                        if (sr_state_data) sr_state_data->IBU = 0;
-                                    }
-
-                                    if (flags & 0x08) { // Backup Battery Voltage (BBV)
-                                        uint8_t bbv_raw = *uki++;
-                                        uint32_t voltage_mv = (bbv_raw / 4) * 1000 + (bbv_raw % 4) * 250;
-                                        if (sr_state_data) {
-                                            sr_state_data->BBV = voltage_mv / 10;
-                                            sr_state_data->BBU = 1;  // работает от резервной батареи
-                                        }
-                                        sprintf(srst+strlen(srst), "BBV:%.2fV ", voltage_mv / 1000.0);
-                                    } else {
-                                        if (sr_state_data) sr_state_data->BBU = 0;
-                                    }
-
-                                    // Навигационный модуль (NMS)
+                                    // Заполняем структуру точно по твоему описанию
                                     if (sr_state_data) {
-                                        sr_state_data->NMS = 1;
-                                        sr_state_data->ST = state;
-                                        sr_state_data->IBV = 0;
+                                        sr_state_data->ST   = st_raw;                    // 0..255
+                                        sr_state_data->MPSV = mpsv_raw * 10;             // 138 → 1380 (13.8 В × 100)
+                                        sr_state_data->BBV  = bbv_raw  * 10;
+                                        sr_state_data->IBV  = ibv_raw  * 10;
+                                        sr_state_data->NMS  = (flags >> 2) & 1;          // бит 2
+                                        sr_state_data->IBU  = (flags >> 1) & 1;          // бит 1
+                                        sr_state_data->BBU  = flags & 1;                 // бит 0
                                     }
 
-                                    sprintf(srst+strlen(srst), "\n");
+                                    // Красивый вывод в лог
+                                    sprintf(srst+strlen(srst),
+                                        "\t\tEGTS_SR_STATE_DATA (Fort Telecom format)\n"
+                                        "\t\t  ST:   %u\n"
+                                        "\t\t  MPSV: %.1f В  (raw=%u)\n"
+                                        "\t\t  BBV:  %.1f В  (raw=%u)\n"
+                                        "\t\t  IBV:  %.1f В  (raw=%u)\n"
+                                        "\t\t  Flags:0x%02X → NMS:%u IBU:%u BBU:%u\n\n",
+                                        st_raw,
+                                        mpsv_raw / 10.0, mpsv_raw,
+                                        bbv_raw  / 10.0, bbv_raw,
+                                        ibv_raw  / 10.0, ibv_raw,
+                                        flags,
+                                        (flags >> 2) & 1,
+                                        (flags >> 1) & 1,
+                                        flags & 1
+                                    );
 
-                                    // Если нужно — логируем в структуру для дальнейшего использования
-                                    if (sr_state_data && mysqlConnected) {
-                                        SQLQueryStateData(conn_, term_id->TID, sr_state_data);
+                                    // Перемещаем указатель
+                                    uki += 5;
+
+                                    // Если вдруг пришли лишние байты — пропускаем
+                                    if (rlen > 5) {
+                                        uki += rlen - 5;
                                     }
                                 }
                                 break;
