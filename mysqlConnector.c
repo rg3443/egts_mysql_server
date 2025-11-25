@@ -134,25 +134,25 @@ static int exec_call(MYSQL *conn, const char *sql,
 
 
 int InsertTerminal(
-	MYSQL *conn, 
+	MYSQL *conn,
 	uint32_t terminalId,
 	const char* expiredAt,
 	uint16_t hdid,
-	uint16_t bs,
-	char imei[15],
-	char imsi[16],
-	char lngc[3],
-	uint8_t nid[3],
-	char msisdn[15]
+	uint16_t bs
+	//char imei[15],
+	//char imsi[16],
+	//char lngc[3],
+	//uint8_t nid[3],
+	//char msisdn[15]
 )
 {
     const char* sqlQuerry = "CALL upsert_terminal_adv(?,'.',NULL,?,NULL,NULL,NULL,NULL,NULL,NULL);";
-    
+
 	MYSQL_BIND b[2] = {0};
     bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId),0);
 	bind_param(&b[1], MYSQL_TYPE_LONG,hdid, sizeof(uint16_t),0);
 	//todo: other params
-	
+
 
     return exec_call(conn,sqlQuerry,b,4,NULL);
 }
@@ -182,7 +182,7 @@ int InsertPos(
     MYSQL_BIND b[17] = {0};
     bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, 		sizeof(terminalId),0);
    // bind_param(&b[1], MYSQL_TYPE_DATETIME, timeStamp, sizeof(timeStamp),0);
-    bind_param(&b[1],  MYSQL_TYPE_LONG, &nvm,			sizeof(uint32_t), 0);
+    bind_param(&b[1],  MYSQL_TYPE_LONG, &ntm,			sizeof(uint32_t), 0);
     bind_param(&b[2],  MYSQL_TYPE_LONG, &lat,		 	sizeof(uint32_t), 0);
     bind_param(&b[3],  MYSQL_TYPE_LONG, &longg, 		sizeof(uint32_t), 0);
     bind_param(&b[4],  MYSQL_TYPE_LONG, &lohs, 			sizeof(unsigned), 0);
@@ -198,8 +198,8 @@ int InsertPos(
     //todo: combine odm
     uint32_t odm_ = 0;
     bind_param(&b[14], MYSQL_TYPE_LONG, &odm_, 			sizeof(uint32_t), 0);
-    bind_param(&b[15], MYSQL_TYPE_LONG, &digital_input, sizeof(uint8_t),  0);
-    bind_param(&b[16], MYSQL_TYPE_LONG, &source, 		sizeof(uint8_t),  0);
+    bind_param(&b[15], MYSQL_TYPE_LONG, &din,           sizeof(uint8_t),  0);
+    bind_param(&b[16], MYSQL_TYPE_LONG, &src, 		    sizeof(uint8_t),  0);
 
     return exec_call(conn,sqlQuerry,b,4,NULL);
 }
@@ -217,17 +217,17 @@ int InsertState(
 )
 {
 	const char* sqlQuerry = "CALL upsert_state(?,?,?,?,?,?,?,?);";
-	
+
 	MYSQL_BIND b[8] = {0};
-	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminal_id, sizeof(terminalId),0);
-	bind_param(&b[1], MYSQL_TYPE_SMALLINT, st, sizeof(uint8_t),0);
-	bind_param(&b[2], MYSQL_TYPE_LONG, mpsv, sizeof(uint32_t),0);
-	bind_param(&b[3], MYSQL_TYPE_LONG, bbv, sizeof(uint32_t),0);
-	bind_param(&b[4], MYSQL_TYPE_LONG, ibv, sizeof(uint32_t),0);
-	bind_param(&b[5], MYSQL_TYPE_SMALLINT, nms, sizeof(unsigned),0);
-	bind_param(&b[6], MYSQL_TYPE_SMALLINT, ibu, sizeof(unsigned),0);
-	bind_param(&b[7], MYSQL_TYPE_SMALLINT, bbu, sizeof(unsigned),0);
-	
+	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId,  sizeof(terminalId),0);
+	bind_param(&b[1], MYSQL_TYPE_SHORT, st,             sizeof(uint8_t),0);
+	bind_param(&b[2], MYSQL_TYPE_LONG, mpsv,            sizeof(uint32_t),0);
+	bind_param(&b[3], MYSQL_TYPE_LONG, bbv,             sizeof(uint32_t),0);
+	bind_param(&b[4], MYSQL_TYPE_LONG, ibv,             sizeof(uint32_t),0);
+	bind_param(&b[5], MYSQL_TYPE_TINY, nms,         sizeof(unsigned),0);
+	bind_param(&b[6], MYSQL_TYPE_TINY, ibu,         sizeof(unsigned),0);
+	bind_param(&b[7], MYSQL_TYPE_TINY, bbu,         sizeof(unsigned),0);
+
 	return exec_call(conn,sqlQuerry,b,4,NULL);
 }
 
@@ -242,9 +242,9 @@ int InsertDin(
 
 	MYSQL_BIND b[3] = {0};
 	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId),0);
-	bind_param(&b[1], MYSQL_TYPE_SMALLINT, dinId, sizeof(dinId),0);
+	bind_param(&b[1], MYSQL_TYPE_SHORT, dinId, sizeof(dinId),0);
 	bind_param(&b[2], MYSQL_TYPE_LONG, dinVal, sizeof(dinVal),0);
-	
+
 	return exec_call(conn,sqlQuerry,b,4,NULL);
 }
 
@@ -259,8 +259,8 @@ int InsertAin(
 
 	MYSQL_BIND b[3] = {0};
 	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId),0);
-	bind_param(&b[1], MYSQL_TYPE_SMALLINT, ainId, sizeof(ainId),0);
+	bind_param(&b[1], MYSQL_TYPE_SHORT, ainId, sizeof(ainId),0);
 	bind_param(&b[2], MYSQL_TYPE_LONG, ainVal, sizeof(ainVal),0);
-	
+
 	return exec_call(conn,sqlQuerry,b,4,NULL);
 }

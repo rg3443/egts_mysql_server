@@ -42,13 +42,13 @@
 	<stdlib.h>
 	<string.h>
 
-1763805635 source:/home/krend/prog/proj/egts_mysql_server/mysqlConnector.c
+1764057546 source:/home/krend/prog/proj/egts_mysql_server/mysqlConnector.c
 	"mysqlConnector.h"
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
 
-1763802503 /home/krend/prog/proj/egts_mysql_server/mysqlConnector.h
+1764057346 /home/krend/prog/proj/egts_mysql_server/mysqlConnector.h
 	<mysql.h>
 	<stdio.h>
 	<stdlib.h>
@@ -61,7 +61,7 @@
 	<stdio.h>
 	<stdlib.h>
 
-1763801901 /home/krend/prog/proj/egts_mysql_server/egtsFunc.h
+1764057918 /home/krend/prog/proj/egts_mysql_server/egtsFunc.h
 	<stdio.h>
 	<stdlib.h>
 	<sys/types.h>
@@ -86,6 +86,6 @@
 	<curses.h>
 	"mysqlConnector.h"
 
-1763803158 source:/home/krend/prog/proj/egts_mysql_server/egtsFunc.c
+1764057888 source:/home/krend/prog/proj/egts_mysql_server/egtsFunc.c
 	"egtsFunc.h"
 

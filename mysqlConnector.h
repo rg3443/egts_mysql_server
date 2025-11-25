@@ -9,11 +9,11 @@
 extern MYSQL *conn_;           // Соединение
 
 
-extern const char* server_;		
+extern const char* server_;
 extern const char* user_;
 extern const char* password_;
 extern const char* db_;
-	
+
 bool ConnectMYSQL(const char* server,
                   const char* user,
                   const char* password,
@@ -22,16 +22,16 @@ bool ConnectMYSQL(const char* server,
 bool QuerryMYSQL(const char* querryStr, MYSQL_RES * res);
 
 int InsertTerminal(
-	MYSQL *conn, 
+	MYSQL *conn,
 	uint32_t terminalId,
 	const char* expiredAt,
 	uint16_t hdid,
-	uint16_t bs,
-	char imei[15] 	= {0},
-	char imsi[16] 	= {0},
-	char lngc[3] 	= {0},
-	uint8_t nid[3] 	= {0},
-	char msisdn[15] = {0}
+	uint16_t bs
+	//char imei[15] 	= {0},
+	//char imsi[16] 	= {0},
+	//char lngc[3] 	= {0},
+	//uint8_t nid[3] 	= {0},
+	//char msisdn[15] = {0}
 );
 
 int InsertPos(

@@ -347,7 +347,7 @@ typedef struct {
 	uint32_t BBV; 	// Backup Battery Voltage
 	uint32_t IBV;	// Internal Battery Voltage
 	unsigned NMS;	// Navigation Module: 1-ON 0-OFF
-	unsigned IBU;	// external power supply : 1-ON 0-OFF 
+	unsigned IBU;	// external power supply : 1-ON 0-OFF
 	unsigned BBU;	// internal battery : 1-ON 0-OFF
 } s_sr_state_data;
 #pragma pack(pop)
@@ -441,7 +441,7 @@ void SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_sr_abs_an_sens_data * 
 
 void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data * din_data);
 
-void SQLQuerryCounter() {} // todo: !
+inline void SQLQuerryCounter() {} // todo: !
 
 void SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * state_data);
 //------------------------------------------------------------------------------

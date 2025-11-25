@@ -588,7 +588,6 @@ s_sr_abs_an_sens_data *sr_abs_an_sens_data = NULL;
 s_sr_abs_dig_sens_data *sr_abs_dig_sens_data = NULL;
 s_sr_abs_cntrl_data *sr_abs_cntrl_data = NULL;
 s_sr_state_data* sr_state_data = NULL;
-s_sr_state_data *sr_state_data = NULL;
 
 uint32_t latit, longit;
 float flatit, flongit;
@@ -654,7 +653,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     byte = *uki++;
 
                                     if(mysqlConnected) {
-                                        InsertTerminal(conn_,term_id->TID);
+                                        SQLQuerryTerminalData(conn_,term_id);
                                     }
 
                                     sprintf(srst+strlen(srst), "\t\tTID:%u\n\t\tFlags:0x%02X:\n"
@@ -912,46 +911,74 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                 case EGTS_SR_ACCEL_DATA://20
                                     uki += rlen;
                                 break;
-                                case EGTS_SR_STATE_DATA://21
+                               case EGTS_SR_STATE_DATA: { // 21
                                     if (rlen < 1) {
-										sprintf(srst+strlen(srst), "\t\tEGTS_SR_STATE_DATA: too short\n");
-										uki += rlen;
-										break;
-									}
+                                        sprintf(srst+strlen(srst), "\t\tEGTS_SR_STATE_DATA: too short (rlen=%u)\n", rlen);
+                                        uki += rlen;
+                                        break;
+                                    }
 
-									uint8_t flags = *uki++;  // SDF - State Data Flags
+                                    // Обнуляем структуру перед заполнением
+                                    if (sr_state_data) memset(sr_state_data, 0, sizeof(s_sr_state_data));
 
-									sprintf(srst+strlen(srst), 
-											"\t\tEGTS_SR_STATE_DATA Flags:0x%02X\n"
-											"\t\t\tIV:%u OV:%u CV:%u BBV:%u MFV:%u\n",
-											flags,
-											!!(flags & 0x01), !!(flags & 0x02), !!(flags & 0x04),
-											!!(flags & 0x08), !!(flags & 0x10));
+                                    uint8_t flags = *uki++;  // State Data Flags (SDF)
+                                    uint8_t state = 1;       // по умолчанию — терминал живой (ST=1)
 
-									if (flags & 0x01) { // Input Values
-										uint8_t iv = *uki++;
-										sprintf(srst+strlen(srst), "\t\t\tInput Values (DIN): 0x%02X\n", iv);
-									}
-									if (flags & 0x02) { // Output Values
-										uint8_t ov = *uki++;
-										sprintf(srst+strlen(srst), "\t\t\tOutput Values (DOUT): 0x%02X\n", ov);
-									}
-									if (flags & 0x04) { // Communication Values
-										uint8_t cv = *uki++;
-										sprintf(srst+strlen(srst), "\t\t\tCommunication State: 0x%02X\n", cv);
-									}
-									if (flags & 0x08) { // Backup Battery Voltage
-										uint8_t bbv = *uki++;
-										sprintf(srst+strlen(srst), "\t\t\tBackup Battery Voltage: %u.%02u V\n",
-												bbv / 4, (bbv % 4) * 25);  // формула из протокола
-									}
-									if (flags & 0x10) { // Main Power Voltage
-										uint8_t mfv = *uki++;
-										sprintf(srst+strlen(srst), "\t\t\tMain Power Voltage: %u.%02u V\n",
-												mfv / 4, (mfv % 4) * 25);
-									} 
+                                    sprintf(srst+strlen(srst), "\t\tEGTS_SR_STATE_DATA Flags:0x%02X ", flags);
 
-									sprintf(srst+strlen(srst), "\n");
+                                    // Основные поля
+                                    if (flags & 0x01) { // Input Values (DIN)
+                                        uint8_t inputs = *uki++;
+                                        sprintf(srst+strlen(srst), "DIN:0x%02X ", inputs);
+                                    }
+                                    if (flags & 0x02) { // Output Values (DOUT)
+                                        uint8_t outputs = *uki++;
+                                        sprintf(srst+strlen(srst), "DOUT:0x%02X ", outputs);
+                                    }
+                                    if (flags & 0x04) { // Communication Values
+                                        uint8_t comm = *uki++;
+                                        sprintf(srst+strlen(srst), "COMM:0x%02X ", comm);
+                                    }
+
+                                    // Напряжение
+                                    if (flags & 0x10) { // Main Power Voltage (MPSV)
+                                        uint8_t mpsv_raw = *uki++;
+                                        uint32_t voltage_mv = (mpsv_raw / 4) * 1000 + (mpsv_raw % 4) * 250; // шаг 0.25 В
+                                        if (sr_state_data) {
+                                            sr_state_data->MPSV = voltage_mv / 10;  // в ×100 мВ, как требует структура
+                                            sr_state_data->IBU = 1;                 // если пришло — значит внешнее питание есть
+                                        }
+                                        sprintf(srst+strlen(srst), "MPSV:%.2fV ", voltage_mv / 1000.0);
+                                    } else {
+                                        if (sr_state_data) sr_state_data->IBU = 0;
+                                    }
+
+                                    if (flags & 0x08) { // Backup Battery Voltage (BBV)
+                                        uint8_t bbv_raw = *uki++;
+                                        uint32_t voltage_mv = (bbv_raw / 4) * 1000 + (bbv_raw % 4) * 250;
+                                        if (sr_state_data) {
+                                            sr_state_data->BBV = voltage_mv / 10;
+                                            sr_state_data->BBU = 1;  // работает от резервной батареи
+                                        }
+                                        sprintf(srst+strlen(srst), "BBV:%.2fV ", voltage_mv / 1000.0);
+                                    } else {
+                                        if (sr_state_data) sr_state_data->BBU = 0;
+                                    }
+
+                                    // Навигационный модуль (NMS)
+                                    if (sr_state_data) {
+                                        sr_state_data->NMS = 1;
+                                        sr_state_data->ST = state;
+                                        sr_state_data->IBV = 0;
+                                    }
+
+                                    sprintf(srst+strlen(srst), "\n");
+
+                                    // Если нужно — логируем в структуру для дальнейшего использования
+                                    if (sr_state_data && mysqlConnected) {
+                                        SQLQueryStateData(conn_, term_id->TID, sr_state_data);
+                                    }
+                                }
                                 break;
                                 case EGTS_SR_LOOPIN_DATA://22
                                     uki += rlen;
@@ -1285,7 +1312,7 @@ void SQLQuerryTerminalData(MYSQL* conn, s_term_id * term_id)
 	);
 }
 
-void SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_abs_an_sens * ain_data)
+void SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_sr_abs_an_sens_data * ain_data)
 {
 	InsertAin(
 		conn,
@@ -1295,13 +1322,14 @@ void SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_abs_an_sens * ain_data
 	);
 }
 
-void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_abs_dig_sens * din_data)
+void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data * din_data)
 {
+    uint32_t finalDSN = ((uint32_t)din_data->DSN_high<< 16) | (uint32_t)din_data->DSN_low;
 	InsertAin(
 		conn,
 		term_id->TID,
-		din_data->DSN,
-		din_data->DSV
+		finalDSN,
+		din_data->DSST
 	);
 }
 
