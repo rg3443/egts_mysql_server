@@ -981,6 +981,23 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 									sr_abs_dig_sens_data->DSN =  (fbyte << 4) | (sbyte >> 4) & 0x0F;
 									sr_abs_dig_sens_data->DSST = (fbyte >> 1) & 0x0F;
 									
+									sprintf(srst+strlen(srst),
+                                        "\t\tEGTS_SR_STATE_DATA (Fort Telecom format)\n"
+                                        "\t\t  ST:   %u\n"
+                                        "\t\t  MPSV: %.1f В  (raw=%u)\n"
+                                        "\t\t  BBV:  %.1f В  (raw=%u)\n"
+                                        "\t\t  IBV:  %.1f В  (raw=%u)\n"
+                                        "\t\t  Flags:0x%02X → NMS:%u IBU:%u BBU:%u\n\n",
+                                        st_raw,
+                                        mpsv_raw / 10.0, mpsv_raw,
+                                        bbv_raw  / 10.0, bbv_raw,
+                                        ibv_raw  / 10.0, ibv_raw,
+                                        flags,
+                                        (flags >> 2) & 1,
+                                        (flags >> 1) & 1,
+                                        flags & 1
+                                    );
+									
 									if(mysqlConnected) {
 										SQLQuerryDinData(conn_,sr_abs_dig_sens_data);
 									}
