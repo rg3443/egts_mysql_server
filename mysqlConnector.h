@@ -88,4 +88,10 @@ int InsertCntr(
 	uint32_t cnv 	// Coutner Value
 );
 
+int InsertLoopin(
+	MYSQL * conn,
+	uint16_t lin, 	// Loop In Number
+	uint8_t lis		// Loop In State
+);
+
 #endif // MYSQLCONNECTOR_H_INCLUDED

@@ -587,7 +587,8 @@ s_sr_ad_sensors_data *sr_ad_sensors_data = NULL;
 s_sr_abs_an_sens_data *sr_abs_an_sens_data = NULL;
 s_sr_abs_dig_sens_data *sr_abs_dig_sens_data = NULL;
 s_sr_abs_cntrl_data *sr_abs_cntrl_data = NULL;
-s_sr_state_data* sr_state_data = NULL;
+s_sr_state_data *sr_state_data = NULL;
+s_sr_abs_loopin_data *sr_abs_loopin_data = NULL;
 
 uint32_t latit, longit;
 float flatit, flongit;
@@ -999,7 +1000,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     );
 									
 									if(mysqlConnected) {
-										SQLQuerryDinData(conn_,sr_abs_dig_sens_data);
+										SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
 									}
 									
                                 break;
@@ -1014,7 +1015,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 									uki += sizeof(uint32_t);
 									
 									if(mysqlConnected) {
-										SQLQuerryDinData(conn_,sr_abs_dig_sens_data);
+										SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
 									}
                                 break;
                                 case EGTS_SR_ABS_CNTR_DATA://25 todo: !
@@ -1025,11 +1026,22 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 									uki += sizeof(uint32_t);
 									
 									if(mysqlConnected) {
-										SQLQuerryCounter(conn_,sr_abs_cntrl_data);
+										SQLQuerryCounter(conn_,term_id,sr_abs_cntrl_data);
 									}
                                 break;
                                 case EGTS_SR_ABS_LOOPIN_DATA://26
-                                    uki += rlen;
+									if(rlen < 2) { uki+=rlen; break; }
+								
+									uint8_t fbyte = *uki++;
+									uint8_t sbyte = *uki++;
+									
+									
+									sr_abs_loopin_data->LIN = (fbyte << 4) | (sbyte >> 4) & 0x0F;
+									sr_abs_loopin_data->LIS = (fbyte >> 1) & 0x0F;
+									
+									if(mysqlConnected) {
+										SQLQuerryLoopin(conn_,term_id,sr_abs_loopin_data);
+									}										
                                 break;
                                 case EGTS_SR_LIQUID_LEVEL_SENSOR://27
                                     uki += rlen;
@@ -1392,5 +1404,16 @@ void SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * stat
 		state_data->NMS,
 		state_data->IBU,
 		state_data->BBU
+	);
+}
+
+
+void SQLQuerryLoopin(MYSQL* conn, s_term_id * term_id, s_sr_abs_loopin_data * loopin_data)
+{
+	InsertLoopin(
+		conn,
+		term_id->TID,
+		loopin_data->LIN,
+		loopin_data->LIS
 	);
 }

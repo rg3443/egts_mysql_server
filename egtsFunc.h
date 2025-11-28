@@ -352,6 +352,13 @@ typedef struct {
 } s_sr_state_data;
 #pragma pack(pop)
 
+#pragma pack(pus,1)
+typedef struct {
+	uint16_t LIN; 	// Loop In Number
+	uint8_t  LIS; 	// Loop In State
+} s_sr_abs_loopin_data;
+#pragma pack(pop)
+
 typedef enum {
     EGTS_PC_OK = 0,// успешно обработано
     EGTS_PC_IN_PROGRESS,// в процессе обработки (результат обработки ещё не известен)
@@ -444,6 +451,8 @@ void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data 
 void SQLQuerryCounter(MYSQL * conn, s_term_id * term_id, s_sr_abs_cntrl_data * cntr_data);
 
 void SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * state_data);
+
+void SQLQuerryLoopin(MYSQL* conn, s_term_id * term_id, s_sr_abs_loopin_data * loopin_data);
 //------------------------------------------------------------------------------
 
 #endif

@@ -277,6 +277,23 @@ int InsertCntr(
 	MYSQL_BIND b[3] = {0};
 	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId),0);
 	bind_param(&b[1], MYSQL_TYPE_TINY, 	   cn, 		   sizeof(uint8_t),0);
-	bind_param(&b[0], MYSQL_TYPE_SHORT,     cnv, 	   sizeof(uint32_t),0);
+	bind_param(&b[2], MYSQL_TYPE_SHORT,     cnv, 	   sizeof(uint32_t),0);
 	
+	return exec_call(conn,sqlQuerry,b,4,NULL);
+}
+
+int InsertLoopin(
+	MYSQL * conn,
+	uint16_t lin, 	// Loop In Number
+	uint8_t lis		// Loop In State
+)
+{
+	const char* sqlQuerry = "CALL upsert_loopin(?,?,?)";
+	
+	MYSQL_BIND b[3] = {0};
+	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId), 0);
+	bind_param(&b[1], MYSQL_TYPE_SHORT, lin, sizeof(uint16_t), 0);
+	bind_param(&b[2], MYSQL_TYPE_TINY, lis, sizeof(uint8_t), 0);
+	
+	return exec_call(conn,sqlQuerry,b,4,NULL);
 }
