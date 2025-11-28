@@ -70,7 +70,7 @@ int InsertState(
 int InsertDin(
 	MYSQL *conn,
 	uint32_t terminalId,
-	uint32_t dinId,
+	uint16_t dinId,
 	uint16_t dinVal
 );
 
@@ -90,8 +90,20 @@ int InsertCntr(
 
 int InsertLoopin(
 	MYSQL * conn,
+	uint32_t terminalId,
 	uint16_t lin, 	// Loop In Number
 	uint8_t lis		// Loop In State
+);
+
+int InsertLiquidLevel(
+	MYSQL * conn,
+	uint32_t terminalId,
+	unsigned llsef, // Liquid Level Sensor Error Flag  
+	uint8_t llsvu,  // Liquid level Sensor Value Unit
+	unsigned rdf,   // Raw Data Flag
+	uint8_t llsn,   // Liquid Level Sensor Number
+	uint16_t maddr, // Module Address 
+	uint32_t llsd   // Liquid Level Sensor (Data?)
 );
 
 #endif // MYSQLCONNECTOR_H_INCLUDED

@@ -321,22 +321,22 @@ typedef struct {
 #pragma pack(push,1)
 typedef struct {
 	uint8_t ASN; 	// Analog Sensor Number
-	uint32_t ASV; 	// Analog Sensor Value
+	uint32_t ASV:24; 	// Analog Sensor Value
 } s_sr_abs_an_sens_data;
 #pragma pack(pop)
 
 #pragma pack(push,1)
 typedef struct {
-	uint32_t DSN; 		// Digital Sensor Number low bytes
-	uint16_t DSST; 		// Digital Sensor State
-	//uint32_t DSN_high;  // Digital Sensor Number high bytes
+	unsigned DSST:4; 		// Digital Sensor State
+	unsigned DSN_low:4; 	// Digital Sensor Number low bytes
+	unsigned DSN_high:8;  // Digital Sensor Number high bytes
 } s_sr_abs_dig_sens_data;
 #pragma pack(pop)
 
 #pragma pack(push,1)
 typedef struct {
 	uint8_t CN;	// Counter Number
-	uint32_t CNV;	// Counter Value
+	uint32_t CNV:24;	// Counter Value
 } s_sr_abs_cntrl_data;
 #pragma pack(pop)
 
@@ -346,17 +346,32 @@ typedef struct {
 	uint8_t MPSV;	// Main Power Source Voltage
 	uint8_t BBV; 	// Backup Battery Voltage
 	uint8_t IBV;	// Internal Battery Voltage
-	unsigned NMS;	// Navigation Module: 1-ON 0-OFF
-	unsigned IBU;	// external power supply : 1-ON 0-OFF
 	unsigned BBU;	// internal battery : 1-ON 0-OFF
+	unsigned IBU;	// external power supply : 1-ON 0-OFF
+	unsigned NMS;	// Navigation Module: 1-ON 0-OFF
+	unsigned none:5;// 5 last bits not used
 } s_sr_state_data;
 #pragma pack(pop)
 
-#pragma pack(pus,1)
+#pragma pack(push,1)
 typedef struct {
-	uint16_t LIN; 	// Loop In Number
-	uint8_t  LIS; 	// Loop In State
+	unsigned LIN_high:4; 	// Loop In Number high bytes
+	unsigned LIS:4; 	    // Loop In State
+	uint8_t LIN_low;		// Loop In Number low bytes
 } s_sr_abs_loopin_data;
+#pragma pack(pop)
+
+#pragma pack(push,1) //todo:
+typedef struct {
+	unsigned LLSN:3; 	// Liquid Level Sensor Number
+	unsigned RDF;		// Raw Data Flag
+	unsigned LLSVU:2;	// Liquid level Sensor Value Unit
+	unsigned LLSEF;		// Liquid Level Sensor Error Flag 
+	unsigned reserved; 	// empty\reserved bit
+	
+	uint16_t MADDR;		// Module Address 
+	uint32_t LLSD;		// Liquid Level Sensor (Data?)
+} s_sr_liquid_level_sensor;
 #pragma pack(pop)
 
 typedef enum {
@@ -453,6 +468,8 @@ void SQLQuerryCounter(MYSQL * conn, s_term_id * term_id, s_sr_abs_cntrl_data * c
 void SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * state_data);
 
 void SQLQuerryLoopin(MYSQL* conn, s_term_id * term_id, s_sr_abs_loopin_data * loopin_data);
+
+void SQLQuerryLiquidLevel(MYSQL * conn, s_term_id * term_id, s_sr_liquid_level_sensor * liquid_level);
 //------------------------------------------------------------------------------
 
 #endif

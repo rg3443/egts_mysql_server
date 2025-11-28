@@ -234,7 +234,7 @@ int InsertState(
 int InsertDin(
 	MYSQL *conn,
 	uint32_t terminalId,
-	uint32_t dinId,
+	uint16_t dinId,
 	uint16_t dinVal
 )
 {
@@ -242,7 +242,7 @@ int InsertDin(
 
 	MYSQL_BIND b[3] = {0};
 	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId),0);
-	bind_param(&b[1], MYSQL_TYPE_SHORT, dinId, sizeof(uint32_t),0);
+	bind_param(&b[1], MYSQL_TYPE_SHORT, dinId, sizeof(uint16_t),0);
 	bind_param(&b[2], MYSQL_TYPE_SHORT, dinVal, sizeof(uint16_t),0);
 
 	return exec_call(conn,sqlQuerry,b,4,NULL);
@@ -284,16 +284,42 @@ int InsertCntr(
 
 int InsertLoopin(
 	MYSQL * conn,
+	uint32_t terminalId,
 	uint16_t lin, 	// Loop In Number
 	uint8_t lis		// Loop In State
 )
 {
-	const char* sqlQuerry = "CALL upsert_loopin(?,?,?)";
+	const char* sqlQuerry = "CALL upsert_loopin(?,?,?);";
 	
 	MYSQL_BIND b[3] = {0};
 	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId), 0);
 	bind_param(&b[1], MYSQL_TYPE_SHORT, lin, sizeof(uint16_t), 0);
 	bind_param(&b[2], MYSQL_TYPE_TINY, lis, sizeof(uint8_t), 0);
+	
+	return exec_call(conn,sqlQuerry,b,4,NULL);
+}
+
+int InsertLiquidLevel(
+	MYSQL * conn,
+	uint32_t terminalId,
+	unsigned llsef, // Liquid Level Sensor Error Flag  
+	uint8_t llsvu,  // Liquid level Sensor Value Unit
+	unsigned rdf,   // Raw Data Flag
+	uint8_t llsn,   // Liquid Level Sensor Number
+	uint16_t maddr, // Module Address 
+	uint32_t llsd   // Liquid Level Sensor (Data?)
+)
+{
+	const char* sqlQuerry = "CALL upsert_liquid_level(?,?,?,?,?,?,?);";
+	
+	MYSQL_BIND b[7] = {0};
+	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId), 0);
+	bind_param(&b[1], MYSQL_TYPE_TINY, llsef, sizeof(unsigned), 0);
+	bind_param(&b[2], MYSQL_TYPE_TINY, llsvu, sizeof(uint8_t), 0);
+	bind_param(&b[3], MYSQL_TYPE_TINY, rdf, sizeof(unsigned), 0);
+	bind_param(&b[4], MYSQL_TYPE_TINY, llsn, sizeof(uint8_t), 0);
+	bind_param(&b[5], MYSQL_TYPE_SHORT, maddr, sizeof(uint16_t), 0);
+	bind_param(&b[6], MYSQL_TYPE_LONG, llsd, sizeof(uint32_t), 0);
 	
 	return exec_call(conn,sqlQuerry,b,4,NULL);
 }
