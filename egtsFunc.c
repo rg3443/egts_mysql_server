@@ -1097,7 +1097,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
 
 
     if (service_flag) {
-        test_flag = 1;
+        test_flag = 0;
         test_tmr = get_timer_sec(10);
     }
 
