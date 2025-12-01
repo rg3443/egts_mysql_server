@@ -228,7 +228,6 @@ void ToSysLogMsg(int LogLevel, const char * const Msg)
 //----------------------------------------------------------------------
 void print_msg(uint8_t dt, const char *fmt, ...)
 {
-/*
 size_t len = buf_size;
 char dts[TIME_STR_LEN] = {0};
 char *udt = TimeNowPrn(dts);
@@ -258,10 +257,10 @@ char *udt = TimeNowPrn(dts);
                     char name[128] = {0};
                     sprintf(name, "%s", TNP(dts));
                     rename(the_log, name);
-                    fd_log = open(the_log, O_WRONLY | O_APPEND | O_CREAT, 0664); //create new file
-                    if (fd_log <= 0) sprintf(name, "%sVer.%s Can't open file %s (%d)\n", udt, vers, the_log, fd_log);
-                                else sprintf(name, "%sVer.%s Open new file %s (%d)\n", udt, vers, the_log, fd_log);
-                    ToSysLogMsg(LOG_INFO, name);
+                    //fd_log = open(the_log, O_WRONLY | O_APPEND | O_CREAT, 0664); //create new file
+                    //if (fd_log <= 0) sprintf(name, "%sVer.%s Can't open file %s (%d)\n", udt, vers, the_log, fd_log);
+                    //            else sprintf(name, "%sVer.%s Open new file %s (%d)\n", udt, vers, the_log, fd_log);
+                    //ToSysLogMsg(LOG_INFO, name);
                 }
             }
         pthread_mutex_unlock(&prn_mutex);
@@ -269,7 +268,6 @@ char *udt = TimeNowPrn(dts);
         free(st);
 
     }
-*/
 }
 //--------------------  function for recive SIGNAL from system -----------
 void GetSignal_(int sig)
