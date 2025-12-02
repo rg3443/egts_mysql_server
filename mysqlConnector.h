@@ -7,6 +7,7 @@
 #include <string.h>
 
 extern MYSQL *conn_;           // Соединение
+extern bool mysqlConnected;
 
 
 extern const char* server_;

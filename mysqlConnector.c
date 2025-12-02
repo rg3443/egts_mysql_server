@@ -2,6 +2,7 @@
 
 //conn = 0;
 MYSQL * conn_ = NULL;
+bool mysqlConnected = false;
 
 const char* server_ = "127.0.0.1";
 const char* user_  = "vkm";

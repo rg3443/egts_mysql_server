@@ -598,7 +598,6 @@ uint16_t *crc16 = (uint16_t *)&from_cli[flen - 2];//CRC16 from device
 uint8_t  calc_CRC8  = CRC8EGTS((uint8_t *)hdr, hdr->HL - 1);
 uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 
-    bool mysqlConnected = ConnectMYSQL(server_,user_,password_,db_);
 
     pid_num = hdr->PID;
 
@@ -705,9 +704,10 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     sprintf(srst+strlen(srst)," SWV:%u.%u MD:%u ST:%u", major, minor, mod_data->MD, mod_data->ST);
                                     uki += sizeof(s_mod_data);
                                     dl = sprintf(vrem,"%s", uki);   if (dl > 32) vrem[32] = '\0';   dl = strlen(vrem);
-                                    if (dl) sprintf(srst+strlen(srst)," SRN:%s", vrem);
+                                  //  if (dl) sprintf(srst+strlen(srst)," SRN:%s", vrem);
                                     uki += dl + 1;
                                     dl = sprintf(vrem,"%s", uki);   if (dl > 32) vrem[32] = '\0';   dl = strlen(vrem);
+                                    //todo: !
                                     if (dl) sprintf(srst+strlen(srst)," DSCR:%s", vrem);
                                     sprintf(srst+strlen(srst), "\n");
                                 break;
@@ -1072,6 +1072,7 @@ done:
 
 void *egts_nitka(void *arg)
 {
+mysqlConnected = ConnectMYSQL(server_,user_,password_,db_);
 uint8_t from_client[buf_size];
 uint8_t to_client[buf_size];
 char stx[2048];
