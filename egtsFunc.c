@@ -601,6 +601,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 
     pid_num = hdr->PID;
 
+mysqlConnected = ConnectMYSQL(server_,user_,password_,db_);
 
 
     switch (hdr->PT) {
@@ -1072,7 +1073,6 @@ done:
 
 void *egts_nitka(void *arg)
 {
-mysqlConnected = ConnectMYSQL(server_,user_,password_,db_);
 uint8_t from_client[buf_size];
 uint8_t to_client[buf_size];
 char stx[2048];
