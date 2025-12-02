@@ -4,8 +4,8 @@
 MYSQL * conn_ = NULL;
 
 const char* server_ = "172.27.160.1";
-const char* user_  = "remote_user";
-const char* password_ = "[eqdgbplt1337A";
+const char* user_  = "vkm";
+const char* password_ = "StrongVkm1337!";
 const char* db_ = "egts_telemetry";
 
 bool ConnectMYSQL(const char* server,
@@ -273,12 +273,12 @@ int InsertCntr(
 )
 {
 	const char* sqlQuerry = "CALL upsert_cntr_data(?,?,?);";
-	
+
 	MYSQL_BIND b[3] = {0};
 	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId),0);
 	bind_param(&b[1], MYSQL_TYPE_TINY, 	   cn, 		   sizeof(uint8_t),0);
 	bind_param(&b[2], MYSQL_TYPE_SHORT,     cnv, 	   sizeof(uint32_t),0);
-	
+
 	return exec_call(conn,sqlQuerry,b,4,NULL);
 }
 
@@ -290,28 +290,28 @@ int InsertLoopin(
 )
 {
 	const char* sqlQuerry = "CALL upsert_loopin(?,?,?);";
-	
+
 	MYSQL_BIND b[3] = {0};
 	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId), 0);
 	bind_param(&b[1], MYSQL_TYPE_SHORT, lin, sizeof(uint16_t), 0);
 	bind_param(&b[2], MYSQL_TYPE_TINY, lis, sizeof(uint8_t), 0);
-	
+
 	return exec_call(conn,sqlQuerry,b,4,NULL);
 }
 
 int InsertLiquidLevel(
 	MYSQL * conn,
 	uint32_t terminalId,
-	unsigned llsef, // Liquid Level Sensor Error Flag  
+	unsigned llsef, // Liquid Level Sensor Error Flag
 	uint8_t llsvu,  // Liquid level Sensor Value Unit
 	unsigned rdf,   // Raw Data Flag
 	uint8_t llsn,   // Liquid Level Sensor Number
-	uint16_t maddr, // Module Address 
+	uint16_t maddr, // Module Address
 	uint32_t llsd   // Liquid Level Sensor (Data?)
 )
 {
 	const char* sqlQuerry = "CALL upsert_liquid_level(?,?,?,?,?,?,?);";
-	
+
 	MYSQL_BIND b[7] = {0};
 	bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId), 0);
 	bind_param(&b[1], MYSQL_TYPE_TINY, llsef, sizeof(unsigned), 0);
@@ -320,6 +320,6 @@ int InsertLiquidLevel(
 	bind_param(&b[4], MYSQL_TYPE_TINY, llsn, sizeof(uint8_t), 0);
 	bind_param(&b[5], MYSQL_TYPE_SHORT, maddr, sizeof(uint16_t), 0);
 	bind_param(&b[6], MYSQL_TYPE_LONG, llsd, sizeof(uint32_t), 0);
-	
+
 	return exec_call(conn,sqlQuerry,b,4,NULL);
 }
