@@ -602,8 +602,8 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 
     pid_num = hdr->PID;
 
-	
-	
+
+
     switch (hdr->PT) {
         case EGTS_PT_RESPONSE://0
             iret = -1;
@@ -914,10 +914,10 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                 case EGTS_SR_ACCEL_DATA://20
                                     uki += rlen;
                                 break;
-                                case EGTS_SR_STATE_DATA: // 21 
+                                case EGTS_SR_STATE_DATA: // 21
                                 {
                                     sr_state_data = (s_sr_state_data*)uki;
- 
+
                                     if (rlen > 5) {
                                         uki += rlen - 5;
                                     }
@@ -926,40 +926,40 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                 case EGTS_SR_LOOPIN_DATA://22
                                     uki += rlen;
                                 break;
-                                case EGTS_SR_ABS_DIG_SENS_DATA://23  
+                                case EGTS_SR_ABS_DIG_SENS_DATA://23
 									sr_abs_dig_sens_data = (s_sr_abs_dig_sens_data*)uki;
-									
+
 									if(mysqlConnected) {
 										SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
 									}
-									
+
                                 break;
-                                case EGTS_SR_ABS_AN_SENS_DATA://24  
+                                case EGTS_SR_ABS_AN_SENS_DATA://24
 									sr_abs_an_sens_data = (s_sr_abs_an_sens_data*)uki;
-									
+
 									if(mysqlConnected) {
 										SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
 									}
                                 break;
-                                case EGTS_SR_ABS_CNTR_DATA://25 
+                                case EGTS_SR_ABS_CNTR_DATA://25
 									sr_abs_cntrl_data = (s_sr_abs_cntrl_data*)uki;
-									
+
 									if(mysqlConnected) {
 										SQLQuerryCounter(conn_,term_id,sr_abs_cntrl_data);
 									}
                                 break;
                                 case EGTS_SR_ABS_LOOPIN_DATA://26
 									sr_abs_loopin_data = (s_sr_abs_loopin_data*)uki;
-									
+
 									if(mysqlConnected) {
 										SQLQuerryLoopin(conn_,term_id,sr_abs_loopin_data);
-									}										
+									}
                                 break;
                                 case EGTS_SR_LIQUID_LEVEL_SENSOR://27
 									sr_liquid_level_sensor = (s_sr_liquid_level_sensor*)uki;
-									
+
 									if(mysqlConnected) {
-										SQLQuerryLiquidLevel(conn_,sr_liquid_level_sensor);
+										SQLQuerryLiquidLevel(conn_,term_id,sr_liquid_level_sensor);
 									}
                                 break;
                                 case EGTS_SR_PASSENGERS_COUNTERS://28
@@ -1290,7 +1290,7 @@ void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data 
 {
 	uint16_t finalDSN =  (din_data->DSN_high << 12) | (din_data->DSN_low >> 4);
 	uint8_t finalDSST = (uint8_t)din_data->DSST;
-	
+
 	InsertAin(
 		conn,
 		term_id->TID,
@@ -1330,7 +1330,7 @@ void SQLQuerryLoopin(MYSQL* conn, s_term_id * term_id, s_sr_abs_loopin_data * lo
 {
 	uint16_t finalLIN =  (loopin_data->LIN_high << 12) | (loopin_data->LIN_low >> 4);
 	uint8_t finalLIS = (uint8_t)loopin_data->LIS;
-	
+
 	InsertLoopin(
 		conn,
 		term_id->TID,
@@ -1346,7 +1346,7 @@ void SQLQuerryLiquidLevel(MYSQL * conn, s_term_id * term_id, s_sr_liquid_level_s
 		conn,
 		term_id->TID,
 		liquid_level->LLSEF,
-		liquid_level-LLSVU,
+		liquid_level->LLSVU,
 		liquid_level->RDF,
 		liquid_level->LLSN,
 		liquid_level->MADDR,
