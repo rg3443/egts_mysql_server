@@ -37,6 +37,9 @@ socklen_t srvlen = sizeof(struct sockaddr_in);
 socklen_t clilen = srvlen;;
 char stx[256] = {0};
 
+    printf("!0\n");
+
+
 //-------------------   for example:  ./egts 9876 info   ---------------------
 
     fd_log = open(the_log, O_WRONLY | O_APPEND | O_CREAT, 0664);//open log file
