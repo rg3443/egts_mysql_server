@@ -1165,6 +1165,8 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
         if (ready)  {
             tmr = 0;
             if (lenrecv) {
+            float packet_kb = (float)lenrecv / 1024.0;
+            print_msg(1, "[%s] Received packet size: %.2f KB (%d bytes)\n", dev, packet_kb, lenrecv);
                 //
                 if (nach) {
                     metka = get_timer_sec(0);
