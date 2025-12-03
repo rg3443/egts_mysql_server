@@ -1086,7 +1086,7 @@ void *egts_nitka(void *arg)
    // printf("!0!1\n");
 uint8_t from_client[buf_size];
 uint8_t to_client[buf_size];
-char stx[2048];
+char stx[10000];
 char tps[vrem_size];
 char dev[size_imei + 1] = {0};
 int lenrecv = 0, lenrecv_tmp = 0, ready = 0, Vixod = 0, uk = 0, client = -1, dl = 0, ack = 0, to_client_len = 0;
