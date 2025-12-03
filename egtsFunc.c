@@ -1183,7 +1183,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
                 sprintf(stx, "[%s] Recv : ", dev);
 
                 for (int k = 0; k < lenrecv; k++) {
-                        printf("k = %d, lenrecv = %d", k, lenrecv);
+                        printf("k = %d, lenrecv = %d\n", k, lenrecv);
                         sprintf(stx+strlen(stx), " %02X", from_client[k]);
                     }
                 printf("done\n");
