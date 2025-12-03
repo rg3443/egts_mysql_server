@@ -1176,7 +1176,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
                 } else {
                     rx_tmr = get_timer_sec(0) - metka;
                     if (rx_tmr > (rx_tmr_last << 1)) {
-                        print_msg(1, "[%s] New timeout period : %u (%u)\n", dev, rx_tmr_last, rx_tmr);
+                        //print_msg(1, "[%s] New timeout period : %u (%u)\n", dev, rx_tmr_last, rx_tmr);
                         rx_tmr_last = rx_tmr;
                     }
                 }
