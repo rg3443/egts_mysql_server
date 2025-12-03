@@ -1179,8 +1179,14 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
                     }
                 }
                 //
+                printf("predone\n");
                 sprintf(stx, "[%s] Recv : ", dev);
-                for (int k = 0; k < lenrecv; k++) sprintf(stx+strlen(stx), " %02X", from_client[k]);
+
+                for (int k = 0; k < lenrecv; k++) {
+                        printf("k = %d, lenrecv = %d", k, lenrecv);
+                        sprintf(stx+strlen(stx), " %02X", from_client[k]);
+                    }
+                printf("done\n");
                 strcat(stx, "\n");
                 print_msg(1, stx);
                 //
