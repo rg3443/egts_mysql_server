@@ -155,7 +155,7 @@ int InsertTerminal(
 	//todo: other params
 
 
-    return exec_call(conn,sqlQuerry,b,4,NULL);
+    return exec_call(conn,sqlQuerry,b,2,NULL);
 }
 
 int InsertPos(
@@ -207,7 +207,7 @@ int InsertPos(
     uint16_t srcd = 0;
     bind_param(&b[19], MYSQL_TYPE_LONG, &src, 		    sizeof(uint16_t),  0);
 
-    return exec_call(conn,sqlQuerry,b,4,NULL);
+    return exec_call(conn,sqlQuerry,b,20,NULL);
 }
 
 int InsertState(
@@ -234,7 +234,7 @@ int InsertState(
 	bind_param(&b[6], MYSQL_TYPE_TINY, ibu,         	sizeof(unsigned),0);
 	bind_param(&b[7], MYSQL_TYPE_TINY, bbu,         	sizeof(unsigned),0);
 
-	return exec_call(conn,sqlQuerry,b,4,NULL);
+	return exec_call(conn,sqlQuerry,b,8,NULL);
 }
 
 int InsertDin(
@@ -251,7 +251,7 @@ int InsertDin(
 	bind_param(&b[1], MYSQL_TYPE_SHORT, dinId, sizeof(uint16_t),0);
 	bind_param(&b[2], MYSQL_TYPE_SHORT, dinVal, sizeof(uint16_t),0);
 
-	return exec_call(conn,sqlQuerry,b,4,NULL);
+	return exec_call(conn,sqlQuerry,b,3,NULL);
 }
 
 int InsertAin(
@@ -268,7 +268,7 @@ int InsertAin(
 	bind_param(&b[1], MYSQL_TYPE_TINY, ainId, sizeof(uint8_t),0);
 	bind_param(&b[2], MYSQL_TYPE_LONG, ainVal, sizeof(uint32_t),0);
 
-	return exec_call(conn,sqlQuerry,b,4,NULL);
+	return exec_call(conn,sqlQuerry,b,3,NULL);
 }
 
 int InsertCntr(
@@ -285,7 +285,7 @@ int InsertCntr(
 	bind_param(&b[1], MYSQL_TYPE_TINY, 	   cn, 		   sizeof(uint8_t),0);
 	bind_param(&b[2], MYSQL_TYPE_SHORT,     cnv, 	   sizeof(uint32_t),0);
 
-	return exec_call(conn,sqlQuerry,b,4,NULL);
+	return exec_call(conn,sqlQuerry,b,3,NULL);
 }
 
 int InsertLoopin(
@@ -302,7 +302,7 @@ int InsertLoopin(
 	bind_param(&b[1], MYSQL_TYPE_SHORT, lin, sizeof(uint16_t), 0);
 	bind_param(&b[2], MYSQL_TYPE_TINY, lis, sizeof(uint8_t), 0);
 
-	return exec_call(conn,sqlQuerry,b,4,NULL);
+	return exec_call(conn,sqlQuerry,b,3,NULL);
 }
 
 int InsertLiquidLevel(
@@ -327,5 +327,5 @@ int InsertLiquidLevel(
 	bind_param(&b[5], MYSQL_TYPE_SHORT, maddr, sizeof(uint16_t), 0);
 	bind_param(&b[6], MYSQL_TYPE_LONG, llsd, sizeof(uint32_t), 0);
 
-	return exec_call(conn,sqlQuerry,b,4,NULL);
+	return exec_call(conn,sqlQuerry,b,7,NULL);
 }
