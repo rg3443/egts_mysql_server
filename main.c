@@ -22,7 +22,8 @@ if(!conRes) {
 */
 
 mysqlConnected = ConnectMYSQL(server_,user_,password_,db_);
-if(mysqlConnected) printf("it is ok");
+if(mysqlConnected) printf("it is ok(mysql)\n");
+else printf("mysql not connected\n");
 fd_set Fds;
 uint16_t tcp_port = 9876;
 struct sockaddr_in srv_conn, cli_conn;
