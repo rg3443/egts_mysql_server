@@ -1009,6 +1009,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
         sprintf(tps+strlen(tps), "\tCRC8=0x%02X/0x%02X CRC16=0x%04X/0x%04X\n",
                                 hdr->HCS, calc_CRC8, *crc16, calc_CRC16);
         dl = flen;   if (dl > ((vrem_size >> 1) - 32)) dl = (vrem_size >> 1) - 32;
+        if(dl > 256) dl = 256;
         for (uk = 0; uk < dl; uk++) sprintf(tps+strlen(tps),"%02X ", from_cli[uk]);
         sprintf(tps+strlen(tps),"\n");
         if (iret < 0) {
