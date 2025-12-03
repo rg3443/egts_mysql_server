@@ -46,6 +46,8 @@ char stx[256] = {0};
         return 1;
     }
 
+    printf("!1\n");
+
     if (argc > 1) {
         resa = atoi(argv[1]);
         if ((resa > 0) && (resa < 0xffff)) tcp_port = resa;
@@ -53,6 +55,9 @@ char stx[256] = {0};
     if (argc > 2) {
         if (!strcmp(argv[2], "info")) service_flag = 1;//send to client (after timeout 10 sec.) test message
     }
+
+
+    printf("!2\n");
 
     //--------------------  set Signals route function ------------------
 
@@ -75,6 +80,7 @@ char stx[256] = {0};
     sprintf(stx, "[Ver.%s] %s Start egts server\n", vers, ShowTime(time(NULL)));
     print_msg(1, stx);
     ToSysLogMsg(LOG_INFO, stx);
+    printf("!3\n");
 
     //--------------------------------------------------------------------
 
