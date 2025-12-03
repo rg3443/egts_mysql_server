@@ -655,12 +655,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     uki += sizeof(uint32_t);//skeep TID (Terminal Identifier)
                                     byte = *uki++;
 
-                                    if(mysqlConnected) {
-                                        printf("sql querring terminal data... - ");
-                                        int res = SQLQuerryTerminalData(conn_,term_id);
-                                        if(res == 0) printf("success\n");
-                                        else printf("unsuccess\n");
-                                    }
+
 
                                     sprintf(srst+strlen(srst), "\t\tTID:%u\n\t\tFlags:0x%02X:\n"
                                         "\t\t\tMNE:%u BSE:%u NIDE:%u SSRA:%u LNGCE:%u IMSIE:%u IMEIE:%u HDIDE:%u\n\t\t",
@@ -699,6 +694,13 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                         uki += size_imei;
                                     }
                                     sprintf(srst+strlen(srst), "\n");
+
+                                     if(mysqlConnected) {
+                                        printf("sql querring terminal data... - ");
+                                        int res = SQLQuerryTerminalData(conn_,term_id);
+                                        if(res == 0) printf("success\n");
+                                        else printf("unsuccess\n");
+                                    }
                                 break;
                                 case EGTS_SR_MODULE_DATA://     (2)
                                     mod_data = (s_mod_data *)uki;
@@ -1208,7 +1210,6 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
             memset(from_client, 0, buf_size);
             memset((uint8_t *)&min_hdr, 0, sizeof(s_min_hdr));
             gtmr = get_timer_sec(max_data_wait);
-            printf("help me");
         }//if (ready)
 
 
