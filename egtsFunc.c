@@ -557,6 +557,7 @@ int dl = sizeof(s_min_hdr);
 //-----------------------------------------------------------------------
 int egts_parse(char *device, s_min_hdr *hdr, uint8_t *from_cli, int flen, uint8_t *to_cli, uint8_t prn)
 {
+prn = 0;
 int uk, dl, err = 0, i, j, iret = 0;
 uint8_t res = EGTS_PC_IO_ERROR;
 s_rec_hdr *rec_hdr = NULL;
