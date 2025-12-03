@@ -654,7 +654,9 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     byte = *uki++;
 
                                     if(mysqlConnected) {
+                                        printf("sql querring terminal data... - ");
                                         SQLQuerryTerminalData(conn_,term_id);
+                                        printf("success\n");
                                     }
 
                                     sprintf(srst+strlen(srst), "\t\tTID:%u\n\t\tFlags:0x%02X:\n"
