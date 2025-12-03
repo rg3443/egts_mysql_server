@@ -1211,6 +1211,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
             //beep();
             break;
         }
+    printf("!0!5\n");
 
         //-------------------------------   Test message   -------------------------------------------
         if (test_flag) {
@@ -1236,10 +1237,12 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
                 //
             }
         }
+    printf("!0!6\n");
         //--------------------------------------------------------------------------------------------
 
     }//while (!Vixod)
 
+    printf("!0!7\n");
     if (client) {
         shutdown(client, SHUT_RDWR);
         close(client);
