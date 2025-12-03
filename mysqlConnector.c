@@ -4,9 +4,9 @@
 MYSQL * conn_ = NULL;
 bool mysqlConnected = false;
 
-const char* server_ = "127.0.0.1";
+const char* server_ = "localhost";
 const char* user_  = "vkm";
-const char* password_ = "StrongVkm1337!";
+const char* password_ = "StrongVkm!";
 const char* db_ = "egts_telemetry";
 
 bool ConnectMYSQL(const char* server,

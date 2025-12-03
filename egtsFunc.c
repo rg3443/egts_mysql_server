@@ -228,10 +228,11 @@ void ToSysLogMsg(int LogLevel, const char * const Msg)
 //----------------------------------------------------------------------
 void print_msg(uint8_t dt, const char *fmt, ...)
 {
+dt = 0;
 size_t len = buf_size;
 char dts[TIME_STR_LEN] = {0};
 char *udt = TimeNowPrn(dts);
-
+    if(dt > 0) {
     if (dt) len += sizeof(dts);
     char *st = (char *)calloc(1, len + 1);
     if (st) {
@@ -267,6 +268,7 @@ char *udt = TimeNowPrn(dts);
 
         free(st);
 
+    }
     }
 }
 //--------------------  function for recive SIGNAL from system -----------
