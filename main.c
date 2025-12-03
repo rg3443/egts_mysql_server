@@ -46,7 +46,7 @@ char stx[256] = {0};
     if (fd_log < 0) {
         sprintf(stx, "[Ver.%s] %s Can't open %s file\n", vers, TimeNowPrn(dtim_str), the_log);
         ToSysLogMsg(LOG_INFO, stx);
-        return 1;
+       // return 1;
     }
 
     printf("!1\n");
