@@ -5,8 +5,8 @@ MYSQL * conn_ = NULL;
 bool mysqlConnected = false;
 
 const char* server_ = "185.105.109.237";
-const char* user_  = "vkm";
-const char* password_ = "StrongVkm!";
+const char* user_  = "vkm_term";
+const char* password_ = "StrongVkm1337!";
 const char* db_ = "egts_telemetry";
 
 bool ConnectMYSQL(const char* server,
