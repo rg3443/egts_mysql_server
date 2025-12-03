@@ -4,7 +4,7 @@
 MYSQL * conn_ = NULL;
 bool mysqlConnected = false;
 
-const char* server_ = "localhost";
+const char* server_ = "185.105.109.237";
 const char* user_  = "vkm";
 const char* password_ = "StrongVkm!";
 const char* db_ = "egts_telemetry";
