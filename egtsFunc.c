@@ -1200,6 +1200,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
             memset(from_client, 0, buf_size);
             memset((uint8_t *)&min_hdr, 0, sizeof(s_min_hdr));
             gtmr = get_timer_sec(max_data_wait);
+            printf("help me");
         }//if (ready)
 
 
