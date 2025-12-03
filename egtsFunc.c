@@ -1083,7 +1083,7 @@ done:
 void *egts_nitka(void *arg)
 {
 
-    printf("!0!1\n");
+   // printf("!0!1\n");
 uint8_t from_client[buf_size];
 uint8_t to_client[buf_size];
 char stx[2048];
@@ -1122,7 +1122,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
     memset(from_client, 0, buf_size);
     gtmr = get_timer_sec(180);//max_data_wait);
 
-    printf("!0!2\n");
+   // printf("!0!2\n");
     while (!Vixod) {
 
         cli_tv.tv_sec = 0;   cli_tv.tv_usec = 25000;
@@ -1160,7 +1160,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
 
         }//if select()
 
-    printf("!0!3\n");
+   // printf("!0!3\n");
 
         if (ready)  {
             tmr = 0;
@@ -1203,7 +1203,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
         }//if (ready)
 
 
-    printf("!0!4\n");
+   // printf("!0!4\n");
         if (QuitAll) break;
 
         if (check_delay_sec(gtmr)) {
@@ -1212,7 +1212,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
             //beep();
             break;
         }
-    printf("!0!5\n");
+    //printf("!0!5\n");
 
         //-------------------------------   Test message   -------------------------------------------
        /* if (test_flag) {
@@ -1238,7 +1238,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
                 //
             }
         }*/
-    printf("!0!6\n");
+   // printf("!0!6\n");
         //--------------------------------------------------------------------------------------------
 
     }//while (!Vixod)
