@@ -32,7 +32,7 @@
 #define TIME_STR_LEN 64
 #define resp_size 1024
 //#define vrem_size buf_size << 1
-#define vrem_size 8192    // Increased
+#define vrem_size 16384    // Increased
 #define max_data_wait 32//16//180
 #define size_imei 15
 #define size_imsi 16
