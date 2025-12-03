@@ -858,7 +858,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     uki += dl;
 
                                     if(mysqlConnected) {
-                                        SQLQuerryPosData(conn_,term_id,sr_pos_data);
+                                        //SQLQuerryPosData(conn_,term_id,sr_pos_data);
                                     }
                                 break;
                                 case EGTS_SR_EXT_POS_DATA://17
@@ -932,7 +932,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 									sr_abs_dig_sens_data = (s_sr_abs_dig_sens_data*)uki;
 
 									if(mysqlConnected) {
-										SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
+										//SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
 									}
 
                                 break;
@@ -940,28 +940,28 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 									sr_abs_an_sens_data = (s_sr_abs_an_sens_data*)uki;
 
 									if(mysqlConnected) {
-										SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
+										//SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
 									}
                                 break;
                                 case EGTS_SR_ABS_CNTR_DATA://25
 									sr_abs_cntrl_data = (s_sr_abs_cntrl_data*)uki;
 
 									if(mysqlConnected) {
-										SQLQuerryCounter(conn_,term_id,sr_abs_cntrl_data);
+										//SQLQuerryCounter(conn_,term_id,sr_abs_cntrl_data);
 									}
                                 break;
                                 case EGTS_SR_ABS_LOOPIN_DATA://26
 									sr_abs_loopin_data = (s_sr_abs_loopin_data*)uki;
 
 									if(mysqlConnected) {
-										SQLQuerryLoopin(conn_,term_id,sr_abs_loopin_data);
+										//SQLQuerryLoopin(conn_,term_id,sr_abs_loopin_data);
 									}
                                 break;
                                 case EGTS_SR_LIQUID_LEVEL_SENSOR://27
 									sr_liquid_level_sensor = (s_sr_liquid_level_sensor*)uki;
 
 									if(mysqlConnected) {
-										SQLQuerryLiquidLevel(conn_,term_id,sr_liquid_level_sensor);
+										//SQLQuerryLiquidLevel(conn_,term_id,sr_liquid_level_sensor);
 									}
                                 break;
                                 case EGTS_SR_PASSENGERS_COUNTERS://28
