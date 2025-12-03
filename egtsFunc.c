@@ -1215,7 +1215,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
     printf("!0!5\n");
 
         //-------------------------------   Test message   -------------------------------------------
-        if (test_flag) {
+       /* if (test_flag) {
             if (check_delay_sec(test_tmr)) {
                 test_flag = 0;
                 to_client_len = sizeof(test_rec);
@@ -1237,7 +1237,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
                 gtmr = get_timer_sec(max_data_wait);
                 //
             }
-        }
+        }*/
     printf("!0!6\n");
         //--------------------------------------------------------------------------------------------
 
