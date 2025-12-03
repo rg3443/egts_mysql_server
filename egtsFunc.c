@@ -655,8 +655,9 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 
                                     if(mysqlConnected) {
                                         printf("sql querring terminal data... - ");
-                                        SQLQuerryTerminalData(conn_,term_id);
-                                        printf("success\n");
+                                        int res = SQLQuerryTerminalData(conn_,term_id);
+                                        if(res == 0) printf("success\n");
+                                        else printf("unsuccess\n");
                                     }
 
                                     sprintf(srst+strlen(srst), "\t\tTID:%u\n\t\tFlags:0x%02X:\n"
@@ -1242,9 +1243,9 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
 //---------------------------------------------------------------------
 
 
-void SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data)
+int SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data)
 {
-    InsertPos(
+    return InsertPos(
         conn,
         term_id->TID,
         pos_data->NTM,
@@ -1267,9 +1268,9 @@ void SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data
     );
 }
 
-void SQLQuerryTerminalData(MYSQL* conn, s_term_id * term_id)
+int SQLQuerryTerminalData(MYSQL* conn, s_term_id * term_id)
 {
-	InsertTerminal(
+	return InsertTerminal(
 		conn,
 		term_id->TID,
 		"",
@@ -1278,9 +1279,9 @@ void SQLQuerryTerminalData(MYSQL* conn, s_term_id * term_id)
 	);
 }
 
-void SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_sr_abs_an_sens_data * ain_data)
+int SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_sr_abs_an_sens_data * ain_data)
 {
-	InsertAin(
+	return InsertAin(
 		conn,
 		term_id->TID,
 		ain_data->ASN,
@@ -1288,12 +1289,12 @@ void SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_sr_abs_an_sens_data * 
 	);
 }
 
-void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data * din_data)
+int SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data * din_data)
 {
 	uint16_t finalDSN =  (din_data->DSN_high << 12) | (din_data->DSN_low >> 4);
 	uint8_t finalDSST = (uint8_t)din_data->DSST;
 
-	InsertAin(
+	return InsertAin(
 		conn,
 		term_id->TID,
 		finalDSN,
@@ -1302,9 +1303,9 @@ void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data 
 }
 
 
-void SQLQuerryCounter(MYSQL * conn, s_term_id * term_id, s_sr_abs_cntrl_data * cntr_data)
+int SQLQuerryCounter(MYSQL * conn, s_term_id * term_id, s_sr_abs_cntrl_data * cntr_data)
 {
-	InsertCntr(
+	return InsertCntr(
 		conn,
 		term_id->TID,
 		cntr_data->CN,
@@ -1312,9 +1313,9 @@ void SQLQuerryCounter(MYSQL * conn, s_term_id * term_id, s_sr_abs_cntrl_data * c
 	);
 }
 
-void SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * state_data)
+int SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * state_data)
 {
-	InsertState(
+	return InsertState(
 		conn,
 		term_id->TID,
 		state_data->ST,
@@ -1328,12 +1329,12 @@ void SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * stat
 }
 
 
-void SQLQuerryLoopin(MYSQL* conn, s_term_id * term_id, s_sr_abs_loopin_data * loopin_data)
+int SQLQuerryLoopin(MYSQL* conn, s_term_id * term_id, s_sr_abs_loopin_data * loopin_data)
 {
 	uint16_t finalLIN =  (loopin_data->LIN_high << 12) | (loopin_data->LIN_low >> 4);
 	uint8_t finalLIS = (uint8_t)loopin_data->LIS;
 
-	InsertLoopin(
+	return InsertLoopin(
 		conn,
 		term_id->TID,
 		finalLIN,
@@ -1342,9 +1343,9 @@ void SQLQuerryLoopin(MYSQL* conn, s_term_id * term_id, s_sr_abs_loopin_data * lo
 }
 
 
-void SQLQuerryLiquidLevel(MYSQL * conn, s_term_id * term_id, s_sr_liquid_level_sensor * liquid_level)
+int SQLQuerryLiquidLevel(MYSQL * conn, s_term_id * term_id, s_sr_liquid_level_sensor * liquid_level)
 {
-	InsertLiquidLevel(
+	return InsertLiquidLevel(
 		conn,
 		term_id->TID,
 		liquid_level->LLSEF,

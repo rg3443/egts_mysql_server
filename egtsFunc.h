@@ -366,10 +366,10 @@ typedef struct {
 	unsigned LLSN:3; 	// Liquid Level Sensor Number
 	unsigned RDF;		// Raw Data Flag
 	unsigned LLSVU:2;	// Liquid level Sensor Value Unit
-	unsigned LLSEF;		// Liquid Level Sensor Error Flag 
+	unsigned LLSEF;		// Liquid Level Sensor Error Flag
 	unsigned reserved; 	// empty\reserved bit
-	
-	uint16_t MADDR;		// Module Address 
+
+	uint16_t MADDR;		// Module Address
 	uint32_t LLSD;		// Liquid Level Sensor (Data?)
 } s_sr_liquid_level_sensor;
 #pragma pack(pop)
@@ -455,21 +455,21 @@ void GetSignal_(int sig);
 
 void *egts_nitka(void *arg);
 
-void SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data);
+int SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data);
 
-void SQLQuerryTerminalData(MYSQL* conn, s_term_id * term_id);
+int SQLQuerryTerminalData(MYSQL* conn, s_term_id * term_id);
 
-void SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_sr_abs_an_sens_data * ain_data);
+int SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_sr_abs_an_sens_data * ain_data);
 
-void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data * din_data);
+int SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data * din_data);
 
-void SQLQuerryCounter(MYSQL * conn, s_term_id * term_id, s_sr_abs_cntrl_data * cntr_data);
+int SQLQuerryCounter(MYSQL * conn, s_term_id * term_id, s_sr_abs_cntrl_data * cntr_data);
 
-void SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * state_data);
+int SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * state_data);
 
-void SQLQuerryLoopin(MYSQL* conn, s_term_id * term_id, s_sr_abs_loopin_data * loopin_data);
+int SQLQuerryLoopin(MYSQL* conn, s_term_id * term_id, s_sr_abs_loopin_data * loopin_data);
 
-void SQLQuerryLiquidLevel(MYSQL * conn, s_term_id * term_id, s_sr_liquid_level_sensor * liquid_level);
+int SQLQuerryLiquidLevel(MYSQL * conn, s_term_id * term_id, s_sr_liquid_level_sensor * liquid_level);
 //------------------------------------------------------------------------------
 
 #endif
