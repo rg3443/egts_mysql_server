@@ -45,3 +45,6 @@ ERROR: Bind (port 9876)
 	Signal SIGHUP
 	Signal SIGHUP
 	Signal SIGHUP
+[Ver.1.5] Wed Dec  3 14:28:55 2025 Start egts server
+ERROR: Bind (port 9876)
+	Signal SIGSEGV

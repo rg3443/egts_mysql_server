@@ -602,6 +602,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 
     pid_num = hdr->PID;
 
+    printf("!!1\n");
 
     switch (hdr->PT) {
         case EGTS_PT_RESPONSE://0
@@ -1007,6 +1008,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
             //default : sprintf(tps+strlen(tps), "packet type : UNKNOWN, ");
     }//switch (hdr->PT)
 
+    printf("!!2\n");
 
     if (prn) {
         sprintf(tps+strlen(tps), "\tCRC8=0x%02X/0x%02X CRC16=0x%04X/0x%04X\n",
@@ -1022,6 +1024,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
         } else print_msg(0, tps);
     } else if (iret < 0) return 0;
 
+    printf("!!3\n");
     //----------------------------   Check   ----------------------------
     dl = 0;
     if ( (hdr->PRV != 1) || (hdr->PRF & 0xC0) ) {
@@ -1065,6 +1068,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
         res = EGTS_PC_DATACRC_ERROR;
         err = 4;
     }
+    printf("!!3\n");
     //-------------------------------------------------------------------
 
 done:
