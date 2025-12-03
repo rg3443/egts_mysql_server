@@ -54,7 +54,7 @@
 	<stdlib.h>
 	<string.h>
 
-1763806247 source:/home/krend/prog/proj/egts_mysql_server/main.c
+1764747025 source:/home/krend/prog/proj/egts_mysql_server/main.c
 	"egtsFunc.h"
 	<locale.h>
 	<wchar.h>
