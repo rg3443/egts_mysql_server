@@ -147,7 +147,7 @@ int InsertTerminal(
 	//char msisdn[15]
 )
 {
-    const char* sqlQuerry = "CALL usp_terminal_keys_upsert(1337,'.',NULL,11,NULL,NULL,NULL,NULL,NULL,NULL);";
+    const char* sqlQuerry = "CALL usp_terminal_keys_upsert(?,'.',NULL,11,NULL,NULL,NULL,NULL,NULL,NULL);";
 
 	MYSQL_BIND b[1] = {0};
     bind_param(&b[0], MYSQL_TYPE_LONGLONG, terminalId, sizeof(terminalId),0);
