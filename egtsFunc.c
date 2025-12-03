@@ -1182,7 +1182,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
                 strcat(stx, "\n");
                 print_msg(1, stx);
                 //
-                printf("packet size: %s", sizeof(min_hdr));
+               // printf("packet size: %s", sizeof(*min_hdr));
                 to_client_len = egts_parse(dev, &min_hdr, from_client, lenrecv, to_client, 1);
                 if (to_client_len) {
                     sprintf(tps, "[%s] Send to device(%d):", dev, to_client_len);
