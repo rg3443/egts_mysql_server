@@ -20,6 +20,9 @@ if(!conRes) {
     if(!querryRes) printf("querry failed: %s\n", mysql_error(conn_));
 }
 */
+
+mysqlConnected = ConnectMYSQL(server_,user_,password_,db_);
+if(mysqlConnected) printf("it is ok");
 fd_set Fds;
 uint16_t tcp_port = 9876;
 struct sockaddr_in srv_conn, cli_conn;

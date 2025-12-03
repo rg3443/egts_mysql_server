@@ -603,8 +603,6 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 
     pid_num = hdr->PID;
 
-mysqlConnected = ConnectMYSQL(server_,user_,password_,db_);
-
 
     switch (hdr->PT) {
         case EGTS_PT_RESPONSE://0
