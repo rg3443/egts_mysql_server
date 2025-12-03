@@ -933,7 +933,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 									if(mysqlConnected) {
 										//SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
 									}
-                                    uki += rlen;
+                                  //  uki += rlen;
 
                                 break;
                                 case EGTS_SR_ABS_AN_SENS_DATA://24
@@ -942,7 +942,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 									if(mysqlConnected) {
 										//SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
 									}
-                                    uki += rlen;
+                                   // uki += rlen;
                                 break;
                                 case EGTS_SR_ABS_CNTR_DATA://25
 									sr_abs_cntrl_data = (s_sr_abs_cntrl_data*)uki;
@@ -950,7 +950,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 									if(mysqlConnected) {
 										//SQLQuerryCounter(conn_,term_id,sr_abs_cntrl_data);
 									}
-                                    uki += rlen;
+                                   // uki += rlen;
                                 break;
                                 case EGTS_SR_ABS_LOOPIN_DATA://26
 									sr_abs_loopin_data = (s_sr_abs_loopin_data*)uki;
@@ -958,7 +958,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 									if(mysqlConnected) {
 										//SQLQuerryLoopin(conn_,term_id,sr_abs_loopin_data);
 									}
-                                    uki += rlen;
+                                   // uki += rlen;
                                 break;
                                 case EGTS_SR_LIQUID_LEVEL_SENSOR://27
 									sr_liquid_level_sensor = (s_sr_liquid_level_sensor*)uki;
@@ -966,7 +966,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 									if(mysqlConnected) {
 										//SQLQuerryLiquidLevel(conn_,term_id,sr_liquid_level_sensor);
 									}
-                                    uki += rlen;
+                                   // uki += rlen;
                                 break;
                                 case EGTS_SR_PASSENGERS_COUNTERS://28
                                     uki += rlen;
