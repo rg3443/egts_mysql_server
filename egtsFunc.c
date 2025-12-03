@@ -1208,7 +1208,6 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
 
    // printf("!0!4\n");
         if (QuitAll) break;
-
         if (check_delay_sec(gtmr)) {
             tout++;
             print_msg(1, "[%s] ***** Timeout - no data from client, counter #%u (%d sec) *****\n", dev, tout, max_data_wait);
