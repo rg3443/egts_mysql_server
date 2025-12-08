@@ -238,7 +238,7 @@ char *udt = TimeNowPrn(dts);
         int dl = 0, sz;
         va_list args;
 
-        if (dt) dl = sprintf(st, "%s", udt);
+        //if (dt) dl = sprintf(st, "%s", udt);
         sz = dl;
 
         va_start(args, fmt);
@@ -557,6 +557,7 @@ int dl = sizeof(s_min_hdr);
 //-----------------------------------------------------------------------
 int egts_parse(char *device, s_min_hdr *hdr, uint8_t *from_cli, int flen, uint8_t *to_cli, uint8_t prn)
 {
+prn = 0;
 int uk, dl, err = 0, i, j, iret = 0;
 uint8_t res = EGTS_PC_IO_ERROR;
 s_rec_hdr *rec_hdr = NULL;
@@ -598,11 +599,10 @@ uint16_t *crc16 = (uint16_t *)&from_cli[flen - 2];//CRC16 from device
 uint8_t  calc_CRC8  = CRC8EGTS((uint8_t *)hdr, hdr->HL - 1);
 uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 
-    bool mysqlConnected = ConnectMYSQL(server_,user_,password_,db_);
 
     pid_num = hdr->PID;
 
-
+    printf("!!1\n");
 
     switch (hdr->PT) {
         case EGTS_PT_RESPONSE://0
@@ -655,9 +655,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     uki += sizeof(uint32_t);//skeep TID (Terminal Identifier)
                                     byte = *uki++;
 
-                                    if(mysqlConnected) {
-                                        SQLQuerryTerminalData(conn_,term_id);
-                                    }
+
 
                                     sprintf(srst+strlen(srst), "\t\tTID:%u\n\t\tFlags:0x%02X:\n"
                                         "\t\t\tMNE:%u BSE:%u NIDE:%u SSRA:%u LNGCE:%u IMSIE:%u IMEIE:%u HDIDE:%u\n\t\t",
@@ -696,6 +694,13 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                         uki += size_imei;
                                     }
                                     sprintf(srst+strlen(srst), "\n");
+
+                                     if(mysqlConnected) {
+                                        printf("sql querring terminal data... - ");
+                                        int res = SQLQuerryTerminalData(conn_,term_id);
+                                        if(res == 0) printf("success\n");
+                                        else printf("unsuccess\n");
+                                    }
                                 break;
                                 case EGTS_SR_MODULE_DATA://     (2)
                                     mod_data = (s_mod_data *)uki;
@@ -705,9 +710,10 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     sprintf(srst+strlen(srst)," SWV:%u.%u MD:%u ST:%u", major, minor, mod_data->MD, mod_data->ST);
                                     uki += sizeof(s_mod_data);
                                     dl = sprintf(vrem,"%s", uki);   if (dl > 32) vrem[32] = '\0';   dl = strlen(vrem);
-                                    if (dl) sprintf(srst+strlen(srst)," SRN:%s", vrem);
+                                  //  if (dl) sprintf(srst+strlen(srst)," SRN:%s", vrem);
                                     uki += dl + 1;
                                     dl = sprintf(vrem,"%s", uki);   if (dl > 32) vrem[32] = '\0';   dl = strlen(vrem);
+                                    //todo: !
                                     if (dl) sprintf(srst+strlen(srst)," DSCR:%s", vrem);
                                     sprintf(srst+strlen(srst), "\n");
                                 break;
@@ -856,7 +862,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     uki += dl;
 
                                     if(mysqlConnected) {
-                                        SQLQuerryPosData(conn_,term_id,sr_pos_data);
+                                        //SQLQuerryPosData(conn_,term_id,sr_pos_data);
                                     }
                                 break;
                                 case EGTS_SR_EXT_POS_DATA://17
@@ -917,10 +923,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                 case EGTS_SR_STATE_DATA: // 21
                                 {
                                     sr_state_data = (s_sr_state_data*)uki;
-
-                                    if (rlen > 5) {
-                                        uki += rlen - 5;
-                                    }
+                                    uki += rlen;
                                 }
                                 break;
                                 case EGTS_SR_LOOPIN_DATA://22
@@ -930,37 +933,42 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
 									sr_abs_dig_sens_data = (s_sr_abs_dig_sens_data*)uki;
 
 									if(mysqlConnected) {
-										SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
+										//SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
 									}
+                                  //  uki += rlen;
 
                                 break;
                                 case EGTS_SR_ABS_AN_SENS_DATA://24
 									sr_abs_an_sens_data = (s_sr_abs_an_sens_data*)uki;
 
 									if(mysqlConnected) {
-										SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
+										//SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
 									}
+                                   // uki += rlen;
                                 break;
                                 case EGTS_SR_ABS_CNTR_DATA://25
 									sr_abs_cntrl_data = (s_sr_abs_cntrl_data*)uki;
 
 									if(mysqlConnected) {
-										SQLQuerryCounter(conn_,term_id,sr_abs_cntrl_data);
+										//SQLQuerryCounter(conn_,term_id,sr_abs_cntrl_data);
 									}
+                                   // uki += rlen;
                                 break;
                                 case EGTS_SR_ABS_LOOPIN_DATA://26
 									sr_abs_loopin_data = (s_sr_abs_loopin_data*)uki;
 
 									if(mysqlConnected) {
-										SQLQuerryLoopin(conn_,term_id,sr_abs_loopin_data);
+										//SQLQuerryLoopin(conn_,term_id,sr_abs_loopin_data);
 									}
+                                   // uki += rlen;
                                 break;
                                 case EGTS_SR_LIQUID_LEVEL_SENSOR://27
 									sr_liquid_level_sensor = (s_sr_liquid_level_sensor*)uki;
 
 									if(mysqlConnected) {
-										SQLQuerryLiquidLevel(conn_,term_id,sr_liquid_level_sensor);
+										//SQLQuerryLiquidLevel(conn_,term_id,sr_liquid_level_sensor);
 									}
+                                   // uki += rlen;
                                 break;
                                 case EGTS_SR_PASSENGERS_COUNTERS://28
                                     uki += rlen;
@@ -1002,11 +1010,13 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
             //default : sprintf(tps+strlen(tps), "packet type : UNKNOWN, ");
     }//switch (hdr->PT)
 
+    printf("!!2\n");
 
     if (prn) {
         sprintf(tps+strlen(tps), "\tCRC8=0x%02X/0x%02X CRC16=0x%04X/0x%04X\n",
                                 hdr->HCS, calc_CRC8, *crc16, calc_CRC16);
         dl = flen;   if (dl > ((vrem_size >> 1) - 32)) dl = (vrem_size >> 1) - 32;
+        if(dl > 512) dl = 512;
         for (uk = 0; uk < dl; uk++) sprintf(tps+strlen(tps),"%02X ", from_cli[uk]);
         sprintf(tps+strlen(tps),"\n");
         if (iret < 0) {
@@ -1016,6 +1026,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
         } else print_msg(0, tps);
     } else if (iret < 0) return 0;
 
+    printf("!!3\n");
     //----------------------------   Check   ----------------------------
     dl = 0;
     if ( (hdr->PRV != 1) || (hdr->PRF & 0xC0) ) {
@@ -1059,6 +1070,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
         res = EGTS_PC_DATACRC_ERROR;
         err = 4;
     }
+    printf("!!3\n");
     //-------------------------------------------------------------------
 
 done:
@@ -1072,9 +1084,11 @@ done:
 
 void *egts_nitka(void *arg)
 {
+
+   // printf("!0!1\n");
 uint8_t from_client[buf_size];
 uint8_t to_client[buf_size];
-char stx[2048];
+char stx[10000];
 char tps[vrem_size];
 char dev[size_imei + 1] = {0};
 int lenrecv = 0, lenrecv_tmp = 0, ready = 0, Vixod = 0, uk = 0, client = -1, dl = 0, ack = 0, to_client_len = 0;
@@ -1110,6 +1124,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
     memset(from_client, 0, buf_size);
     gtmr = get_timer_sec(180);//max_data_wait);
 
+   // printf("!0!2\n");
     while (!Vixod) {
 
         cli_tv.tv_sec = 0;   cli_tv.tv_usec = 25000;
@@ -1147,10 +1162,13 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
 
         }//if select()
 
+   // printf("!0!3\n");
 
         if (ready)  {
             tmr = 0;
             if (lenrecv) {
+            float packet_kb = (float)lenrecv / 1024.0;
+            print_msg(1, "[%s] Received packet size: %.2f KB (%d bytes)\n", dev, packet_kb, lenrecv);
                 //
                 if (nach) {
                     metka = get_timer_sec(0);
@@ -1158,16 +1176,23 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
                 } else {
                     rx_tmr = get_timer_sec(0) - metka;
                     if (rx_tmr > (rx_tmr_last << 1)) {
-                        print_msg(1, "[%s] New timeout period : %u (%u)\n", dev, rx_tmr_last, rx_tmr);
+                        //print_msg(1, "[%s] New timeout period : %u (%u)\n", dev, rx_tmr_last, rx_tmr);
                         rx_tmr_last = rx_tmr;
                     }
                 }
                 //
+                printf("predone\n");
                 sprintf(stx, "[%s] Recv : ", dev);
-                for (int k = 0; k < lenrecv; k++) sprintf(stx+strlen(stx), " %02X", from_client[k]);
+
+                for (int k = 0; k < lenrecv; k++) {
+                        printf("k = %d, lenrecv = %d\n", k, lenrecv);
+                        sprintf(stx+strlen(stx), " %02X", from_client[k]);
+                    }
+                printf("done\n");
                 strcat(stx, "\n");
                 print_msg(1, stx);
                 //
+               // printf("packet size: %s", sizeof(*min_hdr));
                 to_client_len = egts_parse(dev, &min_hdr, from_client, lenrecv, to_client, 1);
                 if (to_client_len) {
                     sprintf(tps, "[%s] Send to device(%d):", dev, to_client_len);
@@ -1188,17 +1213,18 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
         }//if (ready)
 
 
+   // printf("!0!4\n");
         if (QuitAll) break;
-
         if (check_delay_sec(gtmr)) {
             tout++;
             print_msg(1, "[%s] ***** Timeout - no data from client, counter #%u (%d sec) *****\n", dev, tout, max_data_wait);
             //beep();
             break;
         }
+    //printf("!0!5\n");
 
         //-------------------------------   Test message   -------------------------------------------
-        if (test_flag) {
+       /* if (test_flag) {
             if (check_delay_sec(test_tmr)) {
                 test_flag = 0;
                 to_client_len = sizeof(test_rec);
@@ -1220,11 +1246,13 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
                 gtmr = get_timer_sec(max_data_wait);
                 //
             }
-        }
+        }*/
+   // printf("!0!6\n");
         //--------------------------------------------------------------------------------------------
 
     }//while (!Vixod)
 
+    printf("!0!7\n");
     if (client) {
         shutdown(client, SHUT_RDWR);
         close(client);
@@ -1241,14 +1269,15 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
 //---------------------------------------------------------------------
 
 
-void SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data)
+int SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data)
 {
-    InsertPos(
+    return InsertPos(
         conn,
         term_id->TID,
         pos_data->NTM,
         pos_data->LAT,
         pos_data->LONG,
+        pos_data->ALTE,
         pos_data->LOHS,
         pos_data->LAHS,
         pos_data->MV,
@@ -1257,7 +1286,7 @@ void SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data
         pos_data->CS,
         pos_data->VLD,
         pos_data->SPD,
-        pos_data->ALTE,
+        0,
         pos_data->DIR,
         pos_data->ODM,
         pos_data->DIN,
@@ -1265,9 +1294,9 @@ void SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data
     );
 }
 
-void SQLQuerryTerminalData(MYSQL* conn, s_term_id * term_id)
+int SQLQuerryTerminalData(MYSQL* conn, s_term_id * term_id)
 {
-	InsertTerminal(
+	return InsertTerminal(
 		conn,
 		term_id->TID,
 		"",
@@ -1276,9 +1305,9 @@ void SQLQuerryTerminalData(MYSQL* conn, s_term_id * term_id)
 	);
 }
 
-void SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_sr_abs_an_sens_data * ain_data)
+int SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_sr_abs_an_sens_data * ain_data)
 {
-	InsertAin(
+	return InsertAin(
 		conn,
 		term_id->TID,
 		ain_data->ASN,
@@ -1286,12 +1315,12 @@ void SQLQuerryAinData(MYSQL* conn, s_term_id * term_id, s_sr_abs_an_sens_data * 
 	);
 }
 
-void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data * din_data)
+int SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data * din_data)
 {
 	uint16_t finalDSN =  (din_data->DSN_high << 12) | (din_data->DSN_low >> 4);
 	uint8_t finalDSST = (uint8_t)din_data->DSST;
 
-	InsertAin(
+	return InsertAin(
 		conn,
 		term_id->TID,
 		finalDSN,
@@ -1300,9 +1329,9 @@ void SQLQuerryDinData(MYSQL * conn, s_term_id * term_id, s_sr_abs_dig_sens_data 
 }
 
 
-void SQLQuerryCounter(MYSQL * conn, s_term_id * term_id, s_sr_abs_cntrl_data * cntr_data)
+int SQLQuerryCounter(MYSQL * conn, s_term_id * term_id, s_sr_abs_cntrl_data * cntr_data)
 {
-	InsertCntr(
+	return InsertCntr(
 		conn,
 		term_id->TID,
 		cntr_data->CN,
@@ -1310,9 +1339,9 @@ void SQLQuerryCounter(MYSQL * conn, s_term_id * term_id, s_sr_abs_cntrl_data * c
 	);
 }
 
-void SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * state_data)
+int SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * state_data)
 {
-	InsertState(
+	return InsertState(
 		conn,
 		term_id->TID,
 		state_data->ST,
@@ -1326,12 +1355,12 @@ void SQLQuerryStateData(MYSQL* conn, s_term_id * term_id, s_sr_state_data * stat
 }
 
 
-void SQLQuerryLoopin(MYSQL* conn, s_term_id * term_id, s_sr_abs_loopin_data * loopin_data)
+int SQLQuerryLoopin(MYSQL* conn, s_term_id * term_id, s_sr_abs_loopin_data * loopin_data)
 {
 	uint16_t finalLIN =  (loopin_data->LIN_high << 12) | (loopin_data->LIN_low >> 4);
 	uint8_t finalLIS = (uint8_t)loopin_data->LIS;
 
-	InsertLoopin(
+	return InsertLoopin(
 		conn,
 		term_id->TID,
 		finalLIN,
@@ -1340,9 +1369,9 @@ void SQLQuerryLoopin(MYSQL* conn, s_term_id * term_id, s_sr_abs_loopin_data * lo
 }
 
 
-void SQLQuerryLiquidLevel(MYSQL * conn, s_term_id * term_id, s_sr_liquid_level_sensor * liquid_level)
+int SQLQuerryLiquidLevel(MYSQL * conn, s_term_id * term_id, s_sr_liquid_level_sensor * liquid_level)
 {
-	InsertLiquidLevel(
+	return InsertLiquidLevel(
 		conn,
 		term_id->TID,
 		liquid_level->LLSEF,

@@ -20,6 +20,10 @@ if(!conRes) {
     if(!querryRes) printf("querry failed: %s\n", mysql_error(conn_));
 }
 */
+
+mysqlConnected = ConnectMYSQL(server_,user_,password_,db_);
+if(mysqlConnected) printf("it is ok(mysql)\n");
+else printf("mysql not connected\n");
 fd_set Fds;
 uint16_t tcp_port = 9876;
 struct sockaddr_in srv_conn, cli_conn;
@@ -33,14 +37,19 @@ socklen_t srvlen = sizeof(struct sockaddr_in);
 socklen_t clilen = srvlen;;
 char stx[256] = {0};
 
+    printf("!0\n");
+
+
 //-------------------   for example:  ./egts 9876 info   ---------------------
 
     fd_log = open(the_log, O_WRONLY | O_APPEND | O_CREAT, 0664);//open log file
     if (fd_log < 0) {
         sprintf(stx, "[Ver.%s] %s Can't open %s file\n", vers, TimeNowPrn(dtim_str), the_log);
         ToSysLogMsg(LOG_INFO, stx);
-        return 1;
+       // return 1;
     }
+
+    printf("!1\n");
 
     if (argc > 1) {
         resa = atoi(argv[1]);
@@ -49,6 +58,9 @@ char stx[256] = {0};
     if (argc > 2) {
         if (!strcmp(argv[2], "info")) service_flag = 1;//send to client (after timeout 10 sec.) test message
     }
+
+
+    printf("!2\n");
 
     //--------------------  set Signals route function ------------------
 
@@ -71,6 +83,7 @@ char stx[256] = {0};
     sprintf(stx, "[Ver.%s] %s Start egts server\n", vers, ShowTime(time(NULL)));
     print_msg(1, stx);
     ToSysLogMsg(LOG_INFO, stx);
+    printf("!3\n");
 
     //--------------------------------------------------------------------
 

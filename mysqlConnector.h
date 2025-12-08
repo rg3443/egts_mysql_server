@@ -7,6 +7,7 @@
 #include <string.h>
 
 extern MYSQL *conn_;           // Соединение
+extern bool mysqlConnected;
 
 
 extern const char* server_;
@@ -40,6 +41,7 @@ int InsertPos(
     uint32_t ntm, 	// navigation time
     uint32_t lat, 	// latitude
     uint32_t longg,	// longitude
+    unsigned alte, 	// is altitude here
     unsigned lohs, 	// 1-west 0-east
     unsigned lahs,	// 1-south 0-north
     unsigned mv, 	// is moving
@@ -48,7 +50,7 @@ int InsertPos(
     unsigned cs,    //  0-WGS-84, 1-ПЗ-90.02
     unsigned vld,   // is valid
     int16_t spd,   	// speed
-    unsigned alte, 	// is altitude here
+    unsigned alts, 	// altitude
     int16_t dir, 	// direction
     int8_t odm[3], 	// odometr
     unsigned din, 	// digital input
@@ -98,11 +100,11 @@ int InsertLoopin(
 int InsertLiquidLevel(
 	MYSQL * conn,
 	uint32_t terminalId,
-	unsigned llsef, // Liquid Level Sensor Error Flag  
+	unsigned llsef, // Liquid Level Sensor Error Flag
 	uint8_t llsvu,  // Liquid level Sensor Value Unit
 	unsigned rdf,   // Raw Data Flag
 	uint8_t llsn,   // Liquid Level Sensor Number
-	uint16_t maddr, // Module Address 
+	uint16_t maddr, // Module Address
 	uint32_t llsd   // Liquid Level Sensor (Data?)
 );
 
