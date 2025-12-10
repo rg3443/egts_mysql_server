@@ -24,10 +24,10 @@ bool QuerryMYSQL(const char* querryStr, MYSQL_RES * res);
 
 int InsertTerminal(
 	MYSQL *conn,
-	uint32_t terminalId,
-	const char* expiredAt,
-	uint16_t hdid,
-	uint16_t bs
+	uint32_t terminalId//,
+	//const char* expiredAt,
+	//uint16_t hdid,
+	//uint16_t bs
 	//char imei[15] 	= {0},
 	//char imsi[16] 	= {0},
 	//char lngc[3] 	= {0},
@@ -35,38 +35,11 @@ int InsertTerminal(
 	//char msisdn[15] = {0}
 );
 
-int InsertPos(
-    MYSQL *conn,
-    uint32_t terminalId,
-    uint32_t ntm, 	// navigation time
-    uint32_t lat, 	// latitude
-    uint32_t longg,	// longitude
-    unsigned alte, 	// is altitude here
-    unsigned lohs, 	// 1-west 0-east
-    unsigned lahs,	// 1-south 0-north
-    unsigned mv, 	// is moving
-    unsigned bb, 	// is blackbox
-    unsigned fix,	// is 3d
-    unsigned cs,    //  0-WGS-84, 1-ПЗ-90.02
-    unsigned vld,   // is valid
-    int16_t spd,   	// speed
-    unsigned alts, 	// altitude
-    int16_t dir, 	// direction
-    int8_t odm[3], 	// odometr
-    unsigned din, 	// digital input
-    unsigned src 		// source
-);
-
-int InsertState(
+int InsertAin(
 	MYSQL *conn,
 	uint32_t terminalId,
-	uint8_t st,		// state
-	uint8_t mpsv,	// main power source voltage
-	uint8_t bbv,	// backup battery votlage
-	uint8_t ibv,	// interal battery voltage
-	unsigned nms, 	// navigation module time
-	unsigned ibu,	// internal battery use
-	unsigned bbu	// backup battery use
+	uint8_t ainId,
+	uint32_t ainVal
 );
 
 int InsertDin(
@@ -74,13 +47,6 @@ int InsertDin(
 	uint32_t terminalId,
 	uint16_t dinId,
 	uint16_t dinVal
-);
-
-int InsertAin(
-	MYSQL *conn,
-	uint32_t terminalId,
-	uint8_t ainId,
-	uint32_t ainVal
 );
 
 int InsertCntr(
@@ -106,6 +72,40 @@ int InsertLiquidLevel(
 	uint8_t llsn,   // Liquid Level Sensor Number
 	uint16_t maddr, // Module Address
 	uint32_t llsd   // Liquid Level Sensor (Data?)
+);
+
+int InsertState(
+	MYSQL *conn,
+	uint32_t terminalId,
+	uint8_t st,		// state
+	uint8_t mpsv,	// main power source voltage
+	uint8_t bbv,	// backup battery votlage
+	uint8_t ibv,	// interal battery voltage
+	unsigned nms, 	// navigation module time
+	unsigned ibu,	// internal battery use
+	unsigned bbu	// backup battery use
+);
+
+int InsertPos(
+    MYSQL *conn,
+    uint32_t terminalId,
+    uint32_t ntm, 	// navigation time
+    uint32_t lat, 	// latitude
+    uint32_t longg,	// longitude
+    unsigned alte, 	// is altitude here
+    unsigned lohs, 	// 1-west 0-east
+    unsigned lahs,	// 1-south 0-north
+    unsigned mv, 	// is moving
+    unsigned bb, 	// is blackbox
+    unsigned fix,	// is 3d
+    unsigned cs,    //  0-WGS-84, 1-ПЗ-90.02
+    unsigned vld,   // is valid
+    int16_t spd,   	// speed
+    unsigned alts, 	// altitude
+    int16_t dir, 	// direction
+    int8_t odm[3], 	// odometr
+    unsigned din, 	// digital input
+    unsigned src 		// source
 );
 
 #endif // MYSQLCONNECTOR_H_INCLUDED
