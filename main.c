@@ -6,9 +6,9 @@
 #include <stdlib.h>
 int main(int argc, char *argv[])
 {
-//int reconnect = 1;          // обязательно включаем автопереподключение
-//mysql_options(conn_, MYSQL_OPT_RECONNECT, &reconnect);
-/*
+int reconnect = 1;          // обязательно включаем автопереподключение
+mysql_options(conn_, MYSQL_OPT_RECONNECT, &reconnect);
+
 setlocale(LC_ALL, "");
 bool conRes = ConnectMYSQL(server_,user_,password_,db_);
 if(!conRes) {
@@ -16,10 +16,10 @@ if(!conRes) {
 } else {
    // MYSQL_RES * res;
     //printf("eh, %s\n",mysql_error(conn_));
-    bool querryRes = QuerryMYSQL("CALL upsert_terminal(1337,'test','inactive',NULL);",NULL);
+    bool querryRes = QuerryMYSQL("CALL upsert_sr_pos_data(861826074599024,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);",NULL);
     if(!querryRes) printf("querry failed: %s\n", mysql_error(conn_));
 }
-*/
+
 
 mysqlConnected = ConnectMYSQL(server_,user_,password_,db_);
 if(mysqlConnected) printf("it is ok(mysql)\n");
