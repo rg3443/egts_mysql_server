@@ -7,7 +7,7 @@ bool mysqlConnected = false;
 const char* server_ = "185.105.109.237";
 const char* user_  = "vkm_term";
 const char* password_ = "StrongVkm1337!";
-const char* db_ = "egts_telemetry";
+const char* db_ = "vkm_telemetry";
 
 bool ConnectMYSQL(const char* server,
                   const char* user,
