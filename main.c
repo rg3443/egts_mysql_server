@@ -6,8 +6,8 @@
 #include <stdlib.h>
 int main(int argc, char *argv[])
 {
-int reconnect = 1;          // обязательно включаем автопереподключение
-mysql_options(conn_, MYSQL_OPT_RECONNECT, &reconnect);
+//int reconnect = 1;          // обязательно включаем автопереподключение
+//mysql_options(conn_, MYSQL_OPT_RECONNECT, &reconnect);
 
 setlocale(LC_ALL, "");
 bool conRes = ConnectMYSQL(server_,user_,password_,db_);
