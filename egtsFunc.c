@@ -239,17 +239,19 @@ void PrintPosData(s_sr_pos_data * sr_pos_data, uint32_t tim)
 	uint32_t latit, longit;
 	float flatit, flongit;
 	uint8_t sst, rst, rtype, byte, major, minor;
-	
-	if (sr_pos_data->LAHS) strcpy(vr1, "South"); else strcpy(vr1, "North");                                
+	uint16_t speed, dir;
+	uint32_t odometer;
+
+	if (sr_pos_data->LAHS) strcpy(vr1, "South"); else strcpy(vr1, "North");
 	if (sr_pos_data->LOHS) strcpy(vr2, "West");  else strcpy(vr2, "Ost");
 	tim = sr_pos_data->NTM + UTS2010;
-	latit  = sr_pos_data->LAT;    
+	latit  = sr_pos_data->LAT;
 	flatit  = latit;   flatit  = (flatit * 90.0)   / 0xffffffff;  //flatit  *= (180 / M_PI);
-	longit = sr_pos_data->LONG;   
+	longit = sr_pos_data->LONG;
 	flongit = longit;  flongit = (flongit * 180.0) / 0xffffffff;  //flongit *= (180 / M_PI);
 	speed = (sr_pos_data->SPD & 0x3fff) / 10;
 	dir = sr_pos_data->DIR;   if (sr_pos_data->SPD & 0x8000) dir |= 0x100;
-	
+
 	printf("\t\tNTM:'%s' (0x%08X=%u)\n\t\t'%s' LAT:0x%08X/%f  '%s' LONG:0x%08X/%f\n"
                                                 "\t\tFlags:0x%02X\n\t\t\tALTE:%u MV:%u BB:%u CS:%u FIX:%u VLD:%u\n"
                                                 "\t\tSPD:%u DIR:%u ODM:%u[%02X,%02X,%02X] DIN:0x%02X SRC:%u",
