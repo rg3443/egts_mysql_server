@@ -312,7 +312,7 @@ int InsertPos(
     bind_param(&b[7],  MYSQL_TYPE_TINY, &mv, 			sizeof(unsigned), 0);
     bind_param(&b[8],  MYSQL_TYPE_TINY, &bb, 			sizeof(unsigned), 0);
     bind_param(&b[9],  MYSQL_TYPE_TINY, &fix, 			sizeof(unsigned), 0);
-    bind_param(&b[10],  MYSQL_TYPE_TINY, &cs, 			sizeof(unsigned), 0);
+    bind_param(&b[10], MYSQL_TYPE_TINY, &cs, 			sizeof(unsigned), 0);
     bind_param(&b[11], MYSQL_TYPE_TINY, &vld, 			sizeof(unsigned), 0);
     bind_param(&b[12], MYSQL_TYPE_LONG, &spd, 			sizeof(uint16_t), 0);
     bind_param(&b[13], MYSQL_TYPE_TINY, &alts, 			sizeof(unsigned), 0);
@@ -325,7 +325,7 @@ int InsertPos(
     uint32_t alt = 0;
     bind_param(&b[18], MYSQL_TYPE_LONG, &alt, 		    sizeof(uint32_t),  0);
     uint16_t srcd = 0;
-    bind_param(&b[19], MYSQL_TYPE_LONG, &src, 		    sizeof(uint16_t),  0);
+    bind_param(&b[19], MYSQL_TYPE_SHORT, &src, 		    sizeof(uint16_t),  0);
 
     return exec_call(conn,sqlQuerry,b,20,NULL);
 }
