@@ -1,5 +1,5 @@
 #include "mysqlConnector.h"
-
+static uint32_t g_mysql_params[20] = {0};
 //conn = 0;
 MYSQL * conn_ = NULL;
 bool mysqlConnected = false;
@@ -302,36 +302,45 @@ int InsertPos(
     unsigned src 		// source
 )
 {
-printf("InsertPos0\n");
-const char * sqlInit = "Use vkm_telemetry;";exec_call(conn_,sqlInit,NULL,NULL,NULL);
+// Собираем одометр правильно
+    uint32_t odometer = (uint32_t)(unsigned char)odm[0]       |
+                        (uint32_t)(unsigned char)odm[1] << 8  |
+                        (uint32_t)(unsigned char)odm[2] << 16;
 
-    const char* sqlQuerry = "CALL upsert_sr_pos_data(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+    // Заполняем глобальный буфер
+    g_mysql_params[0]  = terminalId;
+    g_mysql_params[1]  = ntm;
+    g_mysql_params[2]  = lat;
+    g_mysql_params[3]  = longg;
+    g_mysql_params[4]  = alte;
+    g_mysql_params[5]  = lohs;
+    g_mysql_params[6]  = lahs;
+    g_mysql_params[7]  = mv;
+    g_mysql_params[8]  = bb;
+    g_mysql_params[9]  = fix;
+    g_mysql_params[10] = cs;
+    g_mysql_params[11] = vld;
+    g_mysql_params[12] = (uint32_t)spd;
+    g_mysql_params[13] = alts;
+    g_mysql_params[14] = (uint32_t)dir;
+    g_mysql_params[15] = odometer;
+    g_mysql_params[16] = din;
+    g_mysql_params[17] = src;
+    g_mysql_params[18] = 0;  // altitude (или заполняй, если ALTE=1)
+    g_mysql_params[19] = 0;  // srcd
+
+    const char* sql = "CALL upsert_sr_pos_data(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
     MYSQL_BIND b[20] = {0};
-    bind_param(&b[0],  MYSQL_TYPE_LONGLONG, &terminalId, sizeof(uint32_t), 0);
-    bind_param(&b[1],  MYSQL_TYPE_LONG, &ntm,			sizeof(uint32_t), 0);
-    bind_param(&b[2],  MYSQL_TYPE_LONG, &lat,		 	sizeof(uint32_t), 0);
-    bind_param(&b[3],  MYSQL_TYPE_LONG, &longg, 		sizeof(uint32_t), 0);
-    bind_param(&b[4],  MYSQL_TYPE_TINY, &alte,          sizeof(unsigned), 0);
-    bind_param(&b[5],  MYSQL_TYPE_TINY, &lohs, 			sizeof(unsigned), 0);
-    bind_param(&b[6],  MYSQL_TYPE_TINY, &lahs, 			sizeof(unsigned), 0);
-    bind_param(&b[7],  MYSQL_TYPE_TINY, &mv, 			sizeof(unsigned), 0);
-    bind_param(&b[8],  MYSQL_TYPE_TINY, &bb, 			sizeof(unsigned), 0);
-    bind_param(&b[9],  MYSQL_TYPE_TINY, &fix, 			sizeof(unsigned), 0);
-    bind_param(&b[10], MYSQL_TYPE_TINY, &cs, 			sizeof(unsigned), 0);
-    bind_param(&b[11], MYSQL_TYPE_TINY, &vld, 			sizeof(unsigned), 0);
-    bind_param(&b[12], MYSQL_TYPE_LONG, &spd, 			sizeof(uint16_t), 0);
-    bind_param(&b[13], MYSQL_TYPE_TINY, &alts, 			sizeof(unsigned), 0);
-    bind_param(&b[14], MYSQL_TYPE_SHORT,&dir, 			sizeof(uint16_t), 0);
-    //todo: combine odm
-    odm_ = 0;
-    bind_param(&b[15], MYSQL_TYPE_LONG, &odm_, 			sizeof(uint32_t),  0);
-    bind_param(&b[16], MYSQL_TYPE_TINY, &din,           sizeof(unsigned),  0);
-    bind_param(&b[17], MYSQL_TYPE_TINY, &src, 		    sizeof(unsigned),  0);
-    uint32_t alt = 0;
-    bind_param(&b[18], MYSQL_TYPE_LONG, &alt, 		    sizeof(uint32_t),  0);
-    uint16_t srcd = 0;
-    bind_param(&b[19], MYSQL_TYPE_SHORT, &src, 		    sizeof(uint16_t),  0);
 
-printf("InsertPos1\n");
-    return exec_call(conn,sqlQuerry,b,20,NULL);
+    for (int i = 0; i < 20; i++) {
+        b[i].buffer_type = (i == 0) ? MYSQL_TYPE_LONGLONG : MYSQL_TYPE_LONG;
+        b[i].buffer = &g_mysql_params[i];
+        b[i].buffer_length = sizeof(uint32_t);
+        b[i].is_null_value = 0;
+    }
+
+    int ret = exec_call(conn, sql, b, 20, NULL);
+    if (ret != 0) {
+        print_msg(1, "InsertPos failed: %s\n", mysql_error(conn));
+    }
 }
