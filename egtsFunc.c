@@ -868,6 +868,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     if (sr_pos_data->LAHS) strcpy(vr1, "South"); else strcpy(vr1, "North");
                                     if (sr_pos_data->LOHS) strcpy(vr2, "West");  else strcpy(vr2, "Ost");
                                     tim = sr_pos_data->NTM + UTS2010;
+                                    printf("long %d\tlat %d\n", sr_pos_data->LONG,sr_pos_data->LAT);
                                     latit  = sr_pos_data->LAT;    flatit  = latit;   flatit  = (flatit * 90.0)   / 0xffffffff;  //flatit  *= (180 / M_PI);
                                     longit = sr_pos_data->LONG;   flongit = longit;  flongit = (flongit * 180.0) / 0xffffffff;  //flongit *= (180 / M_PI);
                                     speed = (sr_pos_data->SPD & 0x3fff) / 10;
