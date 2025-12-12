@@ -300,6 +300,7 @@ int InsertPos(
     unsigned src 		// source
 )
 {
+printf("InsertPos0\n");
     const char* sqlQuerry = "CALL upsert_sr_pos_data(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
     MYSQL_BIND b[20] = {0};
     bind_param(&b[0],  MYSQL_TYPE_LONGLONG, &terminalId, sizeof(uint32_t), 0);
@@ -327,5 +328,6 @@ int InsertPos(
     uint16_t srcd = 0;
     bind_param(&b[19], MYSQL_TYPE_SHORT, &src, 		    sizeof(uint16_t),  0);
 
+printf("InsertPos1\n");
     return exec_call(conn,sqlQuerry,b,20,NULL);
 }
