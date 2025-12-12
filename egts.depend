@@ -48,7 +48,7 @@
 	<stdlib.h>
 	<string.h>
 
-1765532516 /home/krend/prog/proj/egts_mysql_server/mysqlConnector.h
+1765544973 /home/krend/prog/proj/egts_mysql_server/mysqlConnector.h
 	<mysql.h>
 	<stdio.h>
 	<stdlib.h>
@@ -86,6 +86,6 @@
 	<curses.h>
 	"mysqlConnector.h"
 
-1765536377 source:/home/krend/prog/proj/egts_mysql_server/egtsFunc.c
+1765544265 source:/home/krend/prog/proj/egts_mysql_server/egtsFunc.c
 	"egtsFunc.h"
 

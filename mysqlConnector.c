@@ -9,6 +9,8 @@ const char* user_  = "vkm";
 const char* password_ = "StrongVkm1337!";
 const char* db_ = "vkm_telemetry";
 
+uint32_t odm_ = 0;
+
 bool ConnectMYSQL(const char* server,
                   const char* user,
                   const char* password,
@@ -319,7 +321,7 @@ printf("InsertPos0\n");
     bind_param(&b[13], MYSQL_TYPE_TINY, &alts, 			sizeof(unsigned), 0);
     bind_param(&b[14], MYSQL_TYPE_SHORT,&dir, 			sizeof(uint16_t), 0);
     //todo: combine odm
-    uint32_t odm_ = 0;
+    odm_ = 0;
     bind_param(&b[15], MYSQL_TYPE_LONG, &odm_, 			sizeof(uint32_t),  0);
     bind_param(&b[16], MYSQL_TYPE_TINY, &din,           sizeof(unsigned),  0);
     bind_param(&b[17], MYSQL_TYPE_TINY, &src, 		    sizeof(unsigned),  0);

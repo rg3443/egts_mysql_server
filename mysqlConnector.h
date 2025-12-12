@@ -15,6 +15,8 @@ extern const char* user_;
 extern const char* password_;
 extern const char* db_;
 
+extern uint32_t odm_;
+
 bool ConnectMYSQL(const char* server,
                   const char* user,
                   const char* password,
