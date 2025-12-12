@@ -871,7 +871,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     longit = sr_pos_data->LONG;   flongit = longit;  flongit = (flongit * 180.0) / 0xffffffff;  //flongit *= (180 / M_PI);
                                     speed = (sr_pos_data->SPD & 0x3fff) / 10;
                                     dir = sr_pos_data->DIR;   if (sr_pos_data->SPD & 0x8000) dir |= 0x100;
-                                    /*sprintf(srst+strlen(srst),
+                                    sprintf(srst+strlen(srst),
                                                 "\t\tNTM:'%s' (0x%08X=%u)\n\t\t'%s' LAT:0x%08X/%f  '%s' LONG:0x%08X/%f\n"
                                                 "\t\tFlags:0x%02X\n\t\t\tALTE:%u MV:%u BB:%u CS:%u FIX:%u VLD:%u\n"
                                                 "\t\tSPD:%u DIR:%u ODM:%u[%02X,%02X,%02X] DIN:0x%02X SRC:%u",
@@ -880,8 +880,8 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                                 byte, sr_pos_data->ALTE, sr_pos_data->MV, sr_pos_data->BB,
                                                 sr_pos_data->CS, sr_pos_data->FIX, sr_pos_data->VLD,
                                                 speed, dir, odometer, sr_pos_data->ODM[0], sr_pos_data->ODM[1], sr_pos_data->ODM[2],
-                                                sr_pos_data->DIN, sr_pos_data->SRC);*/
-									PrintPosData(sr_pos_data,tim);
+                                                sr_pos_data->DIN, sr_pos_data->SRC);
+									//PrintPosData(sr_pos_data,tim);
                                     /*byte = sr_pos_data->SRC;
                                     if (byte > MaxSrcLocation) byte = MaxSrcLocation - 1;
                                     sprintf(srst+strlen(srst), "(%s)", SrcLocation[byte]);*/
