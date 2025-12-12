@@ -38,8 +38,8 @@ int InsertTerminal(
 int InsertAin(
 	MYSQL *conn,
 	uint32_t terminalId,
-	uint8_t ainId,
-	uint32_t ainVal
+	uint16_t ainId,
+	uint16_t ainVal
 );
 
 int InsertDin(
