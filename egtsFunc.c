@@ -858,6 +858,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                 }
                                 break;
                                 case EGTS_SR_POS_DATA:// 16
+                                    printf("pos_data1\n");
                                     sr_pos_data = (s_sr_pos_data *)uki;
                                     dl  = sizeof(s_sr_pos_data);
                                     byte = *(uki + sizeof(uint32_t) * 3);
@@ -871,6 +872,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     longit = sr_pos_data->LONG;   flongit = longit;  flongit = (flongit * 180.0) / 0xffffffff;  //flongit *= (180 / M_PI);
                                     speed = (sr_pos_data->SPD & 0x3fff) / 10;
                                     dir = sr_pos_data->DIR;   if (sr_pos_data->SPD & 0x8000) dir |= 0x100;
+                                    printf("pos_data2\n");
                                     sprintf(srst+strlen(srst),
                                                 "\t\tNTM:'%s' (0x%08X=%u)\n\t\t'%s' LAT:0x%08X/%f  '%s' LONG:0x%08X/%f\n"
                                                 "\t\tFlags:0x%02X\n\t\t\tALTE:%u MV:%u BB:%u CS:%u FIX:%u VLD:%u\n"
@@ -885,6 +887,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     /*byte = sr_pos_data->SRC;
                                     if (byte > MaxSrcLocation) byte = MaxSrcLocation - 1;
                                     sprintf(srst+strlen(srst), "(%s)", SrcLocation[byte]);*/
+                                    printf("pos_data3\n");
                                     if (sr_pos_data->ALTE) {
                                         altitude = 0;
                                         memcpy(&altitude, uki + dl, 3);
@@ -898,10 +901,12 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     //}
                                     sprintf(srst+strlen(srst), "\n");
                                     uki += dl;
+                                    printf("pos_data4\n");
 
                                     if(mysqlConnected) {
                                         SQLQuerryPosData(conn_,term_id,sr_pos_data);
                                     }
+                                    printf("pos_data5\n");
                                 break;
                                 case EGTS_SR_EXT_POS_DATA://17
                                     sr_ext_pos_data = (s_sr_ext_pos_data *)uki;
