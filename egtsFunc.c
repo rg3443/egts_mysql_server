@@ -883,6 +883,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                                 sr_pos_data->CS, sr_pos_data->FIX, sr_pos_data->VLD,
                                                 speed, dir, odometer, sr_pos_data->ODM[0], sr_pos_data->ODM[1], sr_pos_data->ODM[2],
                                                 sr_pos_data->DIN, sr_pos_data->SRC);
+                                                printf(srst);
 									//PrintPosData(sr_pos_data,tim);
                                     /*byte = sr_pos_data->SRC;
                                     if (byte > MaxSrcLocation) byte = MaxSrcLocation - 1;
