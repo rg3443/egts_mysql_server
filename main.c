@@ -18,6 +18,8 @@ if(!conRes) {
     //printf("eh, %s\n",mysql_error(conn_));
     bool querryRes = QuerryMYSQL("CALL upsert_sr_pos_data(861826074599024,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);",NULL);
     if(!querryRes) printf("querry failed: %s\n", mysql_error(conn_));
+    InsertAin(conn_,861826074599024,0,1);
+    printf("querry failed: %s\n", mysql_error(conn_));
 }
 
 
