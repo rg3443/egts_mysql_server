@@ -303,6 +303,8 @@ int InsertPos(
 )
 {
 printf("InsertPos0\n");
+const char * sqlInit = "Use vkm_telemetry;";exec_call(conn_,sqlInit,NULL,NULL,NULL);
+
     const char* sqlQuerry = "CALL upsert_sr_pos_data(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
     MYSQL_BIND b[20] = {0};
     bind_param(&b[0],  MYSQL_TYPE_LONGLONG, &terminalId, sizeof(uint32_t), 0);
