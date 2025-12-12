@@ -226,6 +226,26 @@ void ToSysLogMsg(int LogLevel, const char * const Msg)
     if (LogLevel <= MaxLogLevel) syslog(LogLevel, "%s", Msg);
 }
 //----------------------------------------------------------------------
+//	Prints
+void PrintHdr(s_min_hdr * hdr)
+{
+	printf("\nHEADER PRINT\n\tProtocolVersion:%d\n\tSecurityKey:%d\n\tPriority:%d\n\tLenght:%d\n\tFrameLenght:%d\n\tPacketType:%d\n",
+		hdr->PRV,hdr->SKID,hdr->PR,hdr->HL,hdr->FDL,hdr->PT
+	);
+}
+void PrintPosData()
+{
+	printf("\t\tNTM:'%s' (0x%08X=%u)\n\t\t'%s' LAT:0x%08X/%f  '%s' LONG:0x%08X/%f\n"
+                                                "\t\tFlags:0x%02X\n\t\t\tALTE:%u MV:%u BB:%u CS:%u FIX:%u VLD:%u\n"
+                                                "\t\tSPD:%u DIR:%u ODM:%u[%02X,%02X,%02X] DIN:0x%02X SRC:%u",
+                                                ShowTime(tim), tim, tim,
+                                                vr1, latit, flatit, vr2, longit, flongit,
+                                                byte, sr_pos_data->ALTE, sr_pos_data->MV, sr_pos_data->BB,
+                                                sr_pos_data->CS, sr_pos_data->FIX, sr_pos_data->VLD,
+                                                speed, dir, odometer, sr_pos_data->ODM[0], sr_pos_data->ODM[1], sr_pos_data->ODM[2],
+                                                sr_pos_data->DIN, sr_pos_data->SRC);
+}
+//----------------------------------------------------------------------
 void print_msg(uint8_t dt, const char *fmt, ...)
 {
 size_t len = buf_size;
