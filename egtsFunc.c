@@ -1228,6 +1228,7 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
                     }
                 printf("done\n");
                 strcat(stx, "\n");
+                printf("done1\n");
                 print_msg(1, stx);
                 //
                // printf("packet size: %s", sizeof(*min_hdr));
