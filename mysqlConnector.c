@@ -307,7 +307,7 @@ int InsertPos(
 printf("InsertPos0\n");
 //const char * sqlInit = "Use vkm_telemetry;";exec_call(conn_,sqlInit))
 
-    const char* sqlQuerry = "CALL upsert_sr_pos_data(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+    const char* sqlQuerry = "CALL upsert_sr_pos_data(861826074599024,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
     printf("trying to querry: %s", sqlQuerry);
     MYSQL_BIND b[20] = {0};
     bind_param(&b[0],  MYSQL_TYPE_LONGLONG, &term_id_, sizeof(uint32_t), 0);
