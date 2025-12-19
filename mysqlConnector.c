@@ -333,7 +333,7 @@ printf("InsertPos0\n");
     alt_ = 0;
     bind_param(&b[18], MYSQL_TYPE_LONG, &alt_, 		    sizeof(uint32_t),  0);
     srcd_ = 0;
-    bind_param(&b[19], MYSQL_TYPE_SHORT, &src, 		    sizeof(uint16_t),  0);
+    bind_param(&b[19], MYSQL_TYPE_SHORT, &srcd_, 		    sizeof(uint16_t),  0);
 
 printf("InsertPos1\n");
     return exec_call(conn,sqlQuerry,&b,20,NULL);
