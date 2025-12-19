@@ -9,6 +9,9 @@
 extern MYSQL *conn_;           // Соединение
 extern bool mysqlConnected;
 
+//todo:delete it
+extern uint32_t alt_;
+extern uint16_t srcd_;
 
 extern const char* server_;
 extern const char* user_;

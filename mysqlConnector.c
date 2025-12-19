@@ -279,7 +279,8 @@ int InsertState(
 
 	return exec_call(conn,sqlQuerry,b,8,NULL);
 }
-
+uint16_t srcd_ = 0;
+uint32_t alt_ = 0;
 int InsertPos(
     MYSQL *conn,
     uint32_t terminalId,
@@ -328,9 +329,9 @@ printf("InsertPos0\n");
     bind_param(&b[15], MYSQL_TYPE_LONG, &odm_, 			sizeof(uint32_t),  0);
     bind_param(&b[16], MYSQL_TYPE_TINY, &din,           sizeof(unsigned),  0);
     bind_param(&b[17], MYSQL_TYPE_TINY, &src, 		    sizeof(unsigned),  0);
-    uint32_t alt = 0;
-    bind_param(&b[18], MYSQL_TYPE_LONG, &alt, 		    sizeof(uint32_t),  0);
-    uint16_t srcd = 0;
+    alt_ = 0;
+    bind_param(&b[18], MYSQL_TYPE_LONG, &alt_, 		    sizeof(uint32_t),  0);
+    srcd_ = 0;
     bind_param(&b[19], MYSQL_TYPE_SHORT, &src, 		    sizeof(uint16_t),  0);
 
 printf("InsertPos1\n");
