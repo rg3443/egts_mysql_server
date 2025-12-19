@@ -322,9 +322,9 @@ printf("InsertPos0\n");
     bind_param(&b[9],  MYSQL_TYPE_TINY, &fix, 			sizeof(unsigned), 0);
     bind_param(&b[10], MYSQL_TYPE_TINY, &cs, 			sizeof(unsigned), 0);
     bind_param(&b[11], MYSQL_TYPE_TINY, &vld, 			sizeof(unsigned), 0);
-    bind_param(&b[12], MYSQL_TYPE_LONG, &spd, 			sizeof(uint16_t), 0);
+    bind_param(&b[12], MYSQL_TYPE_SHORT, &spd, 			sizeof(uint16_t), 0);
     bind_param(&b[13], MYSQL_TYPE_TINY, &alts, 			sizeof(unsigned), 0);
-    bind_param(&b[14], MYSQL_TYPE_SHORT,&dir, 			sizeof(uint16_t), 0);
+    bind_param(&b[14], MYSQL_TYPE_SHORT,&dir, 			sizeof(int16_t), 0);
     //todo: combine odm
     odm_ = 0;
     bind_param(&b[15], MYSQL_TYPE_LONG, &odm_, 			sizeof(uint32_t),  0);
