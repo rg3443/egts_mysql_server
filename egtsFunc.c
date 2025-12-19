@@ -903,7 +903,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     //}
                                     sprintf(srst+strlen(srst), "\n");
                                     uki += dl;
-                                    printf("term_id is: %d", term_id->TID);
+                                    //printf("term_id is: %d", term_id->TID);
                                     printf("pos_data4 %d\n", mysqlConnected);
 
                                     if(mysqlConnected) {
