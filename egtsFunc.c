@@ -1320,7 +1320,7 @@ int SQLQuerryPosData(MYSQL* conn, s_term_id * term_id, s_sr_pos_data * pos_data)
 {
     return InsertPos(
         conn,
-        term_id->TID,
+        0,
         pos_data->NTM,
         pos_data->LAT,
         pos_data->LONG,
