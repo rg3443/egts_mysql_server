@@ -16,14 +16,14 @@ if(!conRes) {
 } else {
    // MYSQL_RES * res;
     //printf("eh, %s\n",mysql_error(conn_));
-    bool querryRes = QuerryMYSQL("CALL upsert_sr_pos_data(861826074599024,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);",NULL);
+    MYSQL_RES *res;
+    bool querryRes = QuerryMYSQL("CALL upsert_sr_pos_data(861826074599024,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);",res);
     if(!querryRes) printf("querry failed: %s\n", mysql_error(conn_));
-    InsertAin(conn_,861826074599024,0,1);
+   // InsertAin(conn_,861826074599024,0,1);
     printf("querry failed: %s\n", mysql_error(conn_));
 
 
     // Проверяем, есть ли результат
-    MYSQL_RES *res = mysql_store_result(conn_);
     if (res) {
         // Это SELECT-подобный запрос — обрабатываем строки
         // ... mysql_fetch_row и т.д.
