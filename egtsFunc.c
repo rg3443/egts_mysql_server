@@ -906,6 +906,7 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                     printf("pos_data4 %d\n", mysqlConnected);
 
                                     if(mysqlConnected) {
+                                        printf("term_id is: %d", term_id->TID);
                                         SQLQuerryPosData(conn_,term_id,sr_pos_data);
                                     }
                                     printf("pos_data5\n");
