@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 setlocale(LC_ALL, "");
 bool conRes = ConnectMYSQL(server_,user_,password_,db_);
 if(!conRes) {
-   // printf("oops, connection failed: %s\n",mysql_error(conn_));
+    printf("oops, connection failed: %s\n",mysql_error(conn_));
 } else {
    // MYSQL_RES * res;
     //printf("eh, %s\n",mysql_error(conn_));
@@ -20,6 +20,24 @@ if(!conRes) {
     if(!querryRes) printf("querry failed: %s\n", mysql_error(conn_));
     InsertAin(conn_,861826074599024,0,1);
     printf("querry failed: %s\n", mysql_error(conn_));
+
+
+    // Проверяем, есть ли результат
+    MYSQL_RES *res = mysql_store_result(conn_);
+    if (res) {
+        // Это SELECT-подобный запрос — обрабатываем строки
+        // ... mysql_fetch_row и т.д.
+        mysql_free_result(res);
+    } else {
+        // Нет результата (INSERT, UPDATE, CALL и т.д.)
+        if (mysql_errno(conn_) != 0) {
+            // Реальная ошибка
+            fprintf(stderr, "mysql_store_result failed: %s\n", mysql_error(conn_));
+        } else {
+            // Нормально — просто нет строк для чтения
+            printf("Affected rows: %llu\n", mysql_affected_rows(conn_));
+        }
+    }
 }
 
 
