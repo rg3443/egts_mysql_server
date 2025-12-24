@@ -977,8 +977,9 @@ uint16_t calc_CRC16 = CRC16EGTS(from_cli, flen - 2);
                                 break;
                                 case EGTS_SR_ABS_DIG_SENS_DATA://23
 									sr_abs_dig_sens_data = (s_sr_abs_dig_sens_data*)uki;
-									s_sr_abs_an_sens_data * adsd = sr_abs_an_sens_data;
-									printf("EGTS_SR_ABS_DIG_SENS_DATA:\n\tASN:%d\n\tASV:%d\n",adsd->ASN,adsd->ASV);
+									s_sr_abs_dig_sens_data * adsd = sr_abs_dig_sens_data;
+									uint16_t digitalSensNum = (adsd->DSN_high << 8) | adsd->DSN_low;
+									printf("EGTS_SR_ABS_DIG_SENS_DATA:\n\tASN:%d\n\tASV:%d\n",digitalSensNum,adsd->DSST);
 
 									if(mysqlConnected) {
 										SQLQuerryDinData(conn_,term_id,sr_abs_dig_sens_data);
