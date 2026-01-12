@@ -1215,6 +1215,8 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
         if (ready)  {
             tmr = 0;
             if (lenrecv) {
+
+
             float packet_kb = (float)lenrecv / 1024.0;
             print_msg(1, "[%s] Received packet size: %.2f KB (%d bytes)\n", dev, packet_kb, lenrecv);
                 //
@@ -1241,6 +1243,17 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
                 printf("done1\n");
                 print_msg(1, stx);
                 //
+                printf("\n┌─────────────────────── ВХОДЯЩИЙ ПАКЕТ ───────────────────────┐\n");
+        printf("│ Устройство: %-20s   Размер: %4d байт              │\n", dev, lenrecv);
+        printf("├───────────────────────────────────────────────────────────────┤\n");
+
+        for (int i = 0; i < lenrecv; i++) {
+            if (i % 16 == 0 && i > 0) printf("\n│ ");
+            else if (i == 0) printf("│ ");
+            printf("%02X ", from_client[i]);
+            if ((i + 1) % 8 == 0 && (i + 1) % 16 != 0) printf(" ");
+        }
+        printf("\n└───────────────────────────────────────────────────────────────┘\n\n");
                // printf("packet size: %s", sizeof(*min_hdr));
                 to_client_len = egts_parse(dev, &min_hdr, from_client, lenrecv, to_client, 1);
                 if (to_client_len) {
