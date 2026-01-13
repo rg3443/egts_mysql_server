@@ -1180,6 +1180,9 @@ uint32_t rx_tmr = 0, rx_tmr_last = 1;
 
         if (select(client + 1, &read_Fds, NULL, NULL, &cli_tv) > 0) {
             lenrecv_tmp = recv(client, &from_client[uk], 1, MSG_DONTWAIT);
+            for(int i=0;i<buf_size;i++) {
+                printf(from_client[i]);
+            }
             if (!lenrecv_tmp) {
                 print_msg(1, "[%s] Client closed connection\n", dev);
                 break;
